@@ -53,16 +53,12 @@ def build_voters(specs, *, lang, use_gpu) -> List[BaseVoter]:
     Skips voters whose engine package is unavailable rather than failing the whole
     cascade — this lets callers run a 5-voter subset on a machine without paddle.
     """
-    from . import voters as _voters_pkg  # noqa: F401  ensure subpackage import
-    from .voters import (
-        OcrmypdfVoter,
-        TesseractVoter,
-        TesseractTsvVoter,
-        PaddleOcrVoter,
-        DoctrVoter,
-        EasyOcrVoter,
-        Pix2StructVoter,
-    )
+    from .tesseract_voter import TesseractTsvVoter, TesseractVoter
+    from .ocrmypdf_voter import OcrmypdfVoter
+    from .paddleocr_voter import PaddleOcrVoter
+    from .doctr_voter import DoctrVoter
+    from .easyocr_voter import EasyOcrVoter
+    from .pix2struct_voter import Pix2StructVoter
 
     registry = {
         "ocrmypdf": OcrmypdfVoter,

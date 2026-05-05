@@ -1,12 +1,12 @@
 """Cascade OCR options.
 
 Subclasses Docling's ``OcrOptions`` so it slots into the standard
-``PdfPipelineOptions(ocr_options=…)`` flow. The ``kind`` literal is the discriminator
-the OcrFactory uses to look up the correct model class.
+``PdfPipelineOptions(ocr_options=…)`` flow. The ``kind`` ClassVar is the
+discriminator the OcrFactory uses to look up the correct model class.
 """
 from __future__ import annotations
 
-from typing import List, Literal, Optional
+from typing import ClassVar, List, Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -63,7 +63,7 @@ class CascadeOcrOptions(OcrOptions):
     - audit ledger off by default; set ``audit_ledger_path`` to enable
     """
 
-    kind: Literal["cascade"] = "cascade"  # type: ignore[assignment]
+    kind: ClassVar[Literal["cascade"]] = "cascade"
 
     voters: List[CascadeVoter] = Field(default_factory=_default_voters)
 

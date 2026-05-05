@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "regnskapsnoter-shacl"
+version = "0.1.0"
+description = "SHACL validator for regnskapsnoter facts — calc-arc consistency, period/balance, dimensional hypercube"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Sondre Skarsten"}]
+dependencies = [
+    "regnskap-no>=1.0.3",
+    "regnskapsnoter-wadm>=0.1.0",
+    "rdflib>=7.0",
+    "pyshacl>=0.25",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.urls]
+Homepage = "https://github.com/sondreskarsten/regnskapsnoter"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/regnskapsnoter_shacl"]

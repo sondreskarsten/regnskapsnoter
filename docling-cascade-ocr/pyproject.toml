@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "docling-cascade-ocr"
+version = "0.1.0"
+description = "Multi-DGP OCR voting plugin for Docling — N independent engines, vote at query time"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Sondre Skarsten"}]
+keywords = ["docling", "ocr", "norwegian", "regnskap", "ensemble", "cascade", "voting"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "docling>=2.30,<3",
+    "pydantic>=2.0",
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+ocrmypdf = ["ocrmypdf>=15"]
+tesseract = ["pytesseract>=0.3"]
+paddle = ["paddleocr>=2.7"]
+doctr = ["python-doctr>=0.8"]
+easyocr = ["easyocr>=1.7"]
+pix2struct = ["transformers>=4.40", "torch>=2.0"]
+all = [
+    "ocrmypdf>=15",
+    "pytesseract>=0.3",
+    "paddleocr>=2.7",
+    "python-doctr>=0.8",
+    "easyocr>=1.7",
+    "transformers>=4.40",
+    "torch>=2.0",
+]
+dev = ["pytest>=7", "pytest-mock>=3", "ruff>=0.4"]
+
+[project.entry-points."docling"]
+cascade_ocr = "docling_cascade_ocr"
+
+[project.urls]
+Homepage = "https://github.com/sondreskarsten/regnskapsnoter"
+Repository = "https://github.com/sondreskarsten/regnskapsnoter"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/docling_cascade_ocr"]

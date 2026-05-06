@@ -1,0 +1,122 @@
+{
+  "orgnr": "813322072",
+  "journalnr": "2024615513",
+  "period_from": "2023-01-01",
+  "period_to": "2023-12-31",
+  "regnskapstype": "SELSKAP",
+  "oppstillingsplan": "store",
+  "valuta": "NOK",
+  "raw_response": {
+    "id": 5139271,
+    "journalnr": "2024615513",
+    "regnskapstype": "SELSKAP",
+    "virksomhet": {
+      "organisasjonsnummer": "813322072",
+      "organisasjonsform": "AS",
+      "morselskap": false
+    },
+    "regnskapsperiode": {
+      "fraDato": "2023-01-01",
+      "tilDato": "2023-12-31"
+    },
+    "valuta": "NOK",
+    "avviklingsregnskap": false,
+    "oppstillingsplan": "store",
+    "revisjon": {
+      "ikkeRevidertAarsregnskap": false,
+      "fravalgRevisjon": true
+    },
+    "regnkapsprinsipper": {
+      "smaaForetak": true,
+      "regnskapsregler": "regnskapslovenAlminneligRegler"
+    },
+    "egenkapitalGjeld": {
+      "sumEgenkapitalGjeld": 509038.0,
+      "egenkapital": {
+        "sumEgenkapital": 362217.0,
+        "opptjentEgenkapital": {
+          "sumOpptjentEgenkapital": -157783.0
+        },
+        "innskuttEgenkapital": {
+          "sumInnskuttEgenkaptial": 520000.0
+        }
+      },
+      "gjeldOversikt": {
+        "sumGjeld": 146821.0,
+        "kortsiktigGjeld": {
+          "sumKortsiktigGjeld": 146821.0
+        },
+        "langsiktigGjeld": {
+          "sumLangsiktigGjeld": 0.0
+        }
+      }
+    },
+    "eiendeler": {
+      "sumEiendeler": 509038.0,
+      "omloepsmidler": {
+        "sumOmloepsmidler": 385384.0
+      },
+      "anleggsmidler": {
+        "sumAnleggsmidler": 123654.0
+      }
+    },
+    "resultatregnskapResultat": {
+      "ordinaertResultatFoerSkattekostnad": -91170.0,
+      "aarsresultat": -91170.0,
+      "totalresultat": -91170.0,
+      "finansresultat": {
+        "nettoFinans": -864.0,
+        "finansinntekt": {
+          "sumFinansinntekter": 1669.0
+        },
+        "finanskostnad": {
+          "sumFinanskostnad": 2533.0
+        }
+      },
+      "driftsresultat": {
+        "driftsresultat": -90307.0,
+        "driftsinntekter": {
+          "sumDriftsinntekter": 1337301.0
+        },
+        "driftskostnad": {
+          "sumDriftskostnad": 1427608.0
+        }
+      }
+    }
+  },
+  "flat_numbers": {
+    "id": 5139271,
+    "egenkapitalGjeld.sumEgenkapitalGjeld": 509038.0,
+    "egenkapitalGjeld.egenkapital.sumEgenkapital": 362217.0,
+    "egenkapitalGjeld.egenkapital.opptjentEgenkapital.sumOpptjentEgenkapital": -157783.0,
+    "egenkapitalGjeld.egenkapital.innskuttEgenkapital.sumInnskuttEgenkaptial": 520000.0,
+    "egenkapitalGjeld.gjeldOversikt.sumGjeld": 146821.0,
+    "egenkapitalGjeld.gjeldOversikt.kortsiktigGjeld.sumKortsiktigGjeld": 146821.0,
+    "egenkapitalGjeld.gjeldOversikt.langsiktigGjeld.sumLangsiktigGjeld": 0.0,
+    "eiendeler.sumEiendeler": 509038.0,
+    "eiendeler.omloepsmidler.sumOmloepsmidler": 385384.0,
+    "eiendeler.anleggsmidler.sumAnleggsmidler": 123654.0,
+    "resultatregnskapResultat.ordinaertResultatFoerSkattekostnad": -91170.0,
+    "resultatregnskapResultat.aarsresultat": -91170.0,
+    "resultatregnskapResultat.totalresultat": -91170.0,
+    "resultatregnskapResultat.finansresultat.nettoFinans": -864.0,
+    "resultatregnskapResultat.finansresultat.finansinntekt.sumFinansinntekter": 1669.0,
+    "resultatregnskapResultat.finansresultat.finanskostnad.sumFinanskostnad": 2533.0,
+    "resultatregnskapResultat.driftsresultat.driftsresultat": -90307.0,
+    "resultatregnskapResultat.driftsresultat.driftsinntekter.sumDriftsinntekter": 1337301.0,
+    "resultatregnskapResultat.driftsresultat.driftskostnad.sumDriftskostnad": 1427608.0
+  },
+  "key_metrics": {
+    "aarsresultat": -91170.0,
+    "ordinaert_resultat_foer_skatt": -91170.0,
+    "driftsresultat": -90307.0,
+    "sum_driftsinntekter": 1337301.0,
+    "sum_driftskostnad": 1427608.0,
+    "netto_finans": -864.0,
+    "sum_finansinntekter": 1669.0,
+    "sum_finanskostnad": 2533.0,
+    "sum_eiendeler": 509038.0,
+    "sum_egenkapital_gjeld": 509038.0,
+    "sum_egenkapital": 362217.0
+  }
+}

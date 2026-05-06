@@ -73,6 +73,15 @@ class CascadeOcrOptions(OcrOptions):
     use_xalign_vote: bool = True
     column_drop_veto: bool = True
 
+    # Vote mode — bbox-cluster vote, token-level vote, or both.
+    # The token-level vote is required when voters disagree on cell
+    # granularity (e.g. a line-mode TesseractVoter alongside a word-mode
+    # TesseractTsvVoter): bbox clustering would mis-pair line and word
+    # bboxes, but token voting on the union of numeric tokens is robust.
+    # See ``token_vote.py`` for the algorithm and the v2-fixture audit
+    # for the empirical motivation.
+    vote_mode: Literal["bbox", "token", "both"] = "both"
+
     # Audit
     audit_ledger_path: Optional[str] = None
 

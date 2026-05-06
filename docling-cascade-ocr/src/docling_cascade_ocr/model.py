@@ -122,12 +122,7 @@ class CascadeOcrModel(BaseOcrModel):
                     for name, cells in per_voter.items()
                 }
 
-                consensus, diagnostics = xalign_vote(
-                    per_voter,
-                    page_size=(page.size.width, page.size.height) if page.size else None,
-                    min_voters_for_commit=self.options.min_voters_for_commit,
-                    column_drop_veto=self.options.column_drop_veto,
-                )
+                consensus, diagnostics = self._vote(per_voter, page)
 
                 self._ledger.write_page(
                     document_id=str(conv_res.input.file),
@@ -135,11 +130,54 @@ class CascadeOcrModel(BaseOcrModel):
                     per_voter_cells=per_voter,
                     consensus_cells=consensus,
                     diagnostics=diagnostics,
+                    page_size=(page.size.width, page.size.height) if page.size else None,
+                    column_dropped_voters=(
+                        next(iter(diagnostics.values()), {}).get("column_dropped_voters", [])
+                        if diagnostics else []
+                    ),
                 )
 
                 self.post_process_cells(consensus, page)
 
             yield page
+
+    def _vote(self, per_voter, page):
+        """Dispatch the configured vote mode(s) and merge consensus.
+
+        Returns ``(consensus_cells, diagnostics)``. The diagnostics dict is
+        mode-tagged: bbox-vote diagnostics under ``"cluster:i"`` keys, token
+        diagnostics under ``"token:i"`` keys.
+        """
+        from .token_vote import token_vote, consensus_to_textcells
+
+        mode = self.options.vote_mode
+        consensus_cells = []
+        diagnostics = {}
+
+        if mode in ("bbox", "both"):
+            bbox_consensus, bbox_diag = xalign_vote(
+                per_voter,
+                page_size=(page.size.width, page.size.height) if page.size else None,
+                min_voters_for_commit=self.options.min_voters_for_commit,
+                column_drop_veto=self.options.column_drop_veto,
+            )
+            consensus_cells.extend(bbox_consensus)
+            diagnostics.update(bbox_diag)
+
+        if mode in ("token", "both"):
+            tv = token_vote(
+                per_voter,
+                min_voters_for_commit=self.options.min_voters_for_commit,
+            )
+            token_cells = consensus_to_textcells(tv)
+            # Re-index continuing from existing consensus_cells
+            offset = len(consensus_cells)
+            for i, c in enumerate(token_cells):
+                consensus_cells.append(c.model_copy(update={"index": offset + i}))
+            for i, nc in enumerate(tv.numeric):
+                diagnostics[f"token:{i}"] = nc.to_dict()
+
+        return consensus_cells, diagnostics
 
     # ---- helpers ----
 

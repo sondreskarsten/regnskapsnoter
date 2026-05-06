@@ -1,0 +1,122 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system dependencies (Tesseract + Norwegian)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y \
+            tesseract-ocr \
+            tesseract-ocr-nor \
+            tesseract-ocr-eng \
+            fonts-dejavu
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install pip toolchain
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytesseract Pillow
+
+      # Install packages in dependency order
+      - name: Install regnskap-no
+        run: pip install -e ./regnskap-no
+
+      - name: Install docling-cascade-ocr
+        run: pip install -e ./docling-cascade-ocr
+
+      - name: Install noter-canonicalizer
+        run: pip install -e "./noter-canonicalizer[fuzzy]"
+
+      - name: Install regnskapsnoter-wadm
+        run: pip install -e ./regnskapsnoter-wadm
+
+      - name: Install regnskapsnoter-shacl
+        run: pip install -e ./regnskapsnoter-shacl
+
+      - name: Install regnskapsnoter-pipeline
+        run: pip install -e ./regnskapsnoter-pipeline
+
+      # Run each package's test suite
+      - name: Test docling-cascade-ocr
+        run: pytest -q docling-cascade-ocr/tests
+
+      - name: Test regnskap-no
+        run: pytest -q regnskap-no/tests
+
+      - name: Test noter-canonicalizer
+        run: pytest -q noter-canonicalizer/tests
+
+      - name: Test regnskapsnoter-wadm
+        run: pytest -q regnskapsnoter-wadm/tests
+
+      - name: Test regnskapsnoter-shacl
+        run: pytest -q regnskapsnoter-shacl/tests
+
+      - name: Test regnskapsnoter-pipeline
+        run: pytest -q regnskapsnoter-pipeline/tests
+
+  taxonomy-rebuild-check:
+    # Sanity check: the bundled regnskap-no Parquet artifacts can be rebuilt
+    # from the current taxonomy source. This catches the "wheel goes stale"
+    # risk flagged in audit D3.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install pyarrow
+        run: pip install pyarrow
+
+      - name: Verify bundled artifacts parse cleanly
+        run: |
+          python <<'PY'
+          import pyarrow.parquet as pq
+          from pathlib import Path
+
+          base = Path("regnskap-no/src/regnskap_no/data")
+          counts = {
+              "concepts": 279,
+              "axes": 4,
+              "axis_members": 31,
+              "calc_arcs": 97,
+              "mappings": 302,
+              "references": 290,
+          }
+          for name, expected in counts.items():
+              t = pq.read_table(base / f"{name}.parquet")
+              assert t.num_rows == expected, (
+                  f"{name}.parquet has {t.num_rows} rows, expected {expected}. "
+                  "Either the taxonomy bumped versions (then bump regnskap-no SemVer) "
+                  "or the build artifacts went stale."
+              )
+              print(f"  {name}: {t.num_rows} ✓")
+          print("All bundled artifacts match v1.0.3 expected counts.")
+          PY

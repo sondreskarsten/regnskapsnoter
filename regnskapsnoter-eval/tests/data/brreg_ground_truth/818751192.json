@@ -1,0 +1,109 @@
+{
+  "orgnr": "818751192",
+  "journalnr": "2023504819",
+  "period_from": "2022-01-01",
+  "period_to": "2022-12-31",
+  "regnskapstype": "SELSKAP",
+  "oppstillingsplan": "store",
+  "valuta": "NOK",
+  "raw_response": {
+    "id": 4091833,
+    "journalnr": "2023504819",
+    "regnskapstype": "SELSKAP",
+    "virksomhet": {
+      "organisasjonsnummer": "818751192",
+      "organisasjonsform": "AS",
+      "morselskap": false
+    },
+    "regnskapsperiode": {
+      "fraDato": "2022-01-01",
+      "tilDato": "2022-12-31"
+    },
+    "valuta": "NOK",
+    "avviklingsregnskap": false,
+    "oppstillingsplan": "store",
+    "revisjon": {
+      "ikkeRevidertAarsregnskap": false,
+      "fravalgRevisjon": true
+    },
+    "regnkapsprinsipper": {
+      "smaaForetak": true,
+      "regnskapsregler": "regnskapslovenAlminneligRegler"
+    },
+    "egenkapitalGjeld": {
+      "sumEgenkapitalGjeld": 396060.0,
+      "egenkapital": {
+        "sumEgenkapital": -1893467.0,
+        "opptjentEgenkapital": {
+          "sumOpptjentEgenkapital": -1923467.0
+        },
+        "innskuttEgenkapital": {
+          "sumInnskuttEgenkaptial": 30000.0
+        }
+      },
+      "gjeldOversikt": {
+        "sumGjeld": 2289527.0,
+        "kortsiktigGjeld": {
+          "sumKortsiktigGjeld": 2155323.0
+        },
+        "langsiktigGjeld": {
+          "sumLangsiktigGjeld": 134204.0
+        }
+      }
+    },
+    "eiendeler": {
+      "sumEiendeler": 396060.0,
+      "omloepsmidler": {
+        "sumOmloepsmidler": 103517.0
+      },
+      "anleggsmidler": {
+        "sumAnleggsmidler": 292543.0
+      }
+    },
+    "resultatregnskapResultat": {
+      "ordinaertResultatFoerSkattekostnad": -167477.0,
+      "aarsresultat": -301832.0,
+      "finansresultat": {
+        "finansinntekt": {},
+        "finanskostnad": {}
+      },
+      "driftsresultat": {
+        "driftsresultat": -167477.0,
+        "driftsinntekter": {},
+        "driftskostnad": {
+          "sumDriftskostnad": 167477.0
+        }
+      }
+    }
+  },
+  "flat_numbers": {
+    "id": 4091833,
+    "egenkapitalGjeld.sumEgenkapitalGjeld": 396060.0,
+    "egenkapitalGjeld.egenkapital.sumEgenkapital": -1893467.0,
+    "egenkapitalGjeld.egenkapital.opptjentEgenkapital.sumOpptjentEgenkapital": -1923467.0,
+    "egenkapitalGjeld.egenkapital.innskuttEgenkapital.sumInnskuttEgenkaptial": 30000.0,
+    "egenkapitalGjeld.gjeldOversikt.sumGjeld": 2289527.0,
+    "egenkapitalGjeld.gjeldOversikt.kortsiktigGjeld.sumKortsiktigGjeld": 2155323.0,
+    "egenkapitalGjeld.gjeldOversikt.langsiktigGjeld.sumLangsiktigGjeld": 134204.0,
+    "eiendeler.sumEiendeler": 396060.0,
+    "eiendeler.omloepsmidler.sumOmloepsmidler": 103517.0,
+    "eiendeler.anleggsmidler.sumAnleggsmidler": 292543.0,
+    "resultatregnskapResultat.ordinaertResultatFoerSkattekostnad": -167477.0,
+    "resultatregnskapResultat.aarsresultat": -301832.0,
+    "resultatregnskapResultat.driftsresultat.driftsresultat": -167477.0,
+    "resultatregnskapResultat.driftsresultat.driftskostnad.sumDriftskostnad": 167477.0
+  },
+  "key_metrics": {
+    "aarsresultat": -301832.0,
+    "ordinaert_resultat_foer_skatt": -167477.0,
+    "driftsresultat": -167477.0,
+    "sum_driftsinntekter": null,
+    "sum_driftskostnad": 167477.0,
+    "netto_finans": null,
+    "sum_finansinntekter": null,
+    "sum_finanskostnad": null,
+    "sum_eiendeler": 396060.0,
+    "sum_egenkapital_gjeld": 396060.0,
+    "sum_egenkapital": -1893467.0
+  }
+}

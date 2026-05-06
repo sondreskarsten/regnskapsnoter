@@ -65,9 +65,10 @@ def run_production_eval():
         blob.download_to_filename(local)
 
         doc = fitz.open(local)
+        n_pages = doc.page_count
         per_voter = {v.name: set() for v in voters}
 
-        for p_idx in range(doc.page_count):
+        for p_idx in range(n_pages):
             pix = doc[p_idx].get_pixmap(matrix=fitz.Matrix(150/72, 150/72))
             img = Image.frombytes('RGB', (pix.width, pix.height), pix.samples)
             rect = BoundingBox(l=0, t=0, r=float(img.width), b=float(img.height),
@@ -96,7 +97,7 @@ def run_production_eval():
 
         results.append({
             "orgnr": orgnr,
-            "n_pages": doc.page_count if hasattr(doc, 'page_count') else 0,
+            "n_pages": n_pages,
             "n_voters": len(voters),
             "n_tokens_total": len(all_tokens),
             "n_tokens_reliable_at_5": reliable,

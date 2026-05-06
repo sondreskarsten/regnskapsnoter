@@ -33,6 +33,7 @@ class BaseVoter(ABC):
 
     name: str = "base"
     lazy: bool = False  # set by build_voters from CascadeVoter.lazy
+    sample_rate: float = 0.0  # set by build_voters from CascadeVoter.sample_rate
 
     def __init__(self, *, lang: List[str], use_gpu: bool = False) -> None:
         self.lang = lang
@@ -61,6 +62,7 @@ def build_voters(specs, *, lang, use_gpu) -> List[BaseVoter]:
     from .easyocr_voter import EasyOcrVoter
     from .pix2struct_voter import Pix2StructVoter
     from .docling_default_voter import DoclingDefaultVoter
+    from .document_ai_voter import DocumentAiVoter
 
     registry = {
         "ocrmypdf": OcrmypdfVoter,
@@ -71,6 +73,7 @@ def build_voters(specs, *, lang, use_gpu) -> List[BaseVoter]:
         "easyocr": EasyOcrVoter,
         "pix2struct": Pix2StructVoter,
         "docling_default": DoclingDefaultVoter,
+        "document_ai": DocumentAiVoter,
     }
     out: List[BaseVoter] = []
     for spec in specs:
@@ -82,8 +85,10 @@ def build_voters(specs, *, lang, use_gpu) -> List[BaseVoter]:
             continue
         try:
             voter = cls(lang=lang, use_gpu=use_gpu)
-            # Annotate with the lazy flag so the model can split eager vs lazy
+            # Annotate with the lazy flag and sample_rate so the model
+            # can split eager / lazy and apply sampling
             voter.lazy = bool(getattr(spec, "lazy", False))
+            voter.sample_rate = float(getattr(spec, "sample_rate", 0.0))
             out.append(voter)
         except VoterUnavailable as e:
             _log.warning("Skipping voter %s: %s", spec.name, e)

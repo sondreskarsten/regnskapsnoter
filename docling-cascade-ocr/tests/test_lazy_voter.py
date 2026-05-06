@@ -70,14 +70,19 @@ class TestLazyFlagOnSpec:
         )
 
     def test_default_eager_voters_are_not_lazy(self):
-        """The 7 eager production voters + docling_default must not be lazy."""
+        """Only the lazy/sampled voters (pix2struct, document_ai) are lazy.
+
+        The 6 production OCR voters + docling_default must run eagerly so
+        the cascade never falls back to vanilla Docling.
+        """
         from docling_cascade_ocr.options import CascadeOcrOptions
         opts = CascadeOcrOptions()
         for v in opts.voters:
-            if v.name == "pix2struct":
+            if v.name in ("pix2struct", "document_ai"):
                 continue
             assert v.lazy is False, (
-                f"{v.name} must not be lazy — only pix2struct is a tiebreaker"
+                f"{v.name} must not be lazy — only pix2struct and "
+                "document_ai are tiebreakers"
             )
 
 

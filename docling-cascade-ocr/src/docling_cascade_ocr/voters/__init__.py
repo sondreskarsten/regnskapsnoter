@@ -6,6 +6,7 @@ from .doctr_voter import DoctrVoter
 from .easyocr_voter import EasyOcrVoter
 from .pix2struct_voter import Pix2StructVoter
 from .docling_default_voter import DoclingDefaultVoter
+from .document_ai_voter import DocumentAiVoter
 
 __all__ = [
     "BaseVoter",
@@ -19,4 +20,5 @@ __all__ = [
     "EasyOcrVoter",
     "Pix2StructVoter",
     "DoclingDefaultVoter",
+    "DocumentAiVoter",
 ]

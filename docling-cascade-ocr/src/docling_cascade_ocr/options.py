@@ -22,6 +22,7 @@ VoterName = Literal[
     "easyocr",
     "pix2struct",
     "docling_default",
+    "document_ai",
 ]
 
 
@@ -36,6 +37,12 @@ class CascadeVoter(BaseModel):
     regions where the eager voters disagreed. pix2struct is the canonical
     lazy voter — visual extraction is too expensive to run on every page,
     but cheap enough to call when the OCR cascade can't reach consensus.
+
+    ``sample_rate`` (audit C2): a number in [0.0, 1.0]. If > 0, the voter
+    fires on a random ``sample_rate`` fraction of pages even when there is
+    no disagreement. Combined with ``lazy=True``, this gives the
+    Document-AI / Gemini-Vision pattern: 100% on disagreement + N%
+    sampled audit on otherwise-unanimous pages.
     """
 
     name: VoterName
@@ -43,6 +50,7 @@ class CascadeVoter(BaseModel):
     weight: float = 1.0
     timeout_s: float = 60.0
     lazy: bool = False
+    sample_rate: float = 0.0
 
 
 def _default_voters() -> List[CascadeVoter]:
@@ -60,6 +68,12 @@ def _default_voters() -> List[CascadeVoter]:
         # Wrap-pattern (audit C1): always include Docling's stock default
         # so the cascade is never worse than vanilla Docling.
         CascadeVoter(name="docling_default"),
+        # Document AI / Gemini Vision (audit C2): off by default since it
+        # requires API credentials. When enabled, it runs lazily on
+        # disagreement regions PLUS a 5% random sample of unanimous pages
+        # for ongoing audit signal.
+        CascadeVoter(name="document_ai", enabled=False, lazy=True,
+                      sample_rate=0.05),
     ]
 
 

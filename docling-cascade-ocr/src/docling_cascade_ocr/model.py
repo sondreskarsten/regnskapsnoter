@@ -152,6 +152,7 @@ class CascadeOcrModel(BaseOcrModel):
                         threshold=self.options.min_voters_for_commit,
                     )
                     if disagree_rects:
+                        # Run ALL lazy voters on disagreement regions
                         scaled_disagree = self._scale_rects(
                             disagree_rects, scale=self.scale,
                         )
@@ -162,9 +163,23 @@ class CascadeOcrModel(BaseOcrModel):
                             name: [self._scale_cell_back(c, self.scale) for c in cells]
                             for name, cells in lazy_per_voter.items()
                         }
-                        # Merge lazy votes into the per-voter dict, then re-vote
                         per_voter.update(lazy_per_voter)
                         consensus, diagnostics = self._vote(per_voter, page)
+                    else:
+                        # No disagreement; check sampling for audit-mode voters
+                        # (audit C2: document_ai with sample_rate=0.05 fires on
+                        # 5% of unanimous pages for ongoing audit signal)
+                        sampled = self._sampled_voters(lazy_voters)
+                        if sampled:
+                            sampled_per_voter = self._run_voters(
+                                page_image, scaled_rects, voters=sampled,
+                            )
+                            sampled_per_voter = {
+                                name: [self._scale_cell_back(c, self.scale) for c in cells]
+                                for name, cells in sampled_per_voter.items()
+                            }
+                            per_voter.update(sampled_per_voter)
+                            consensus, diagnostics = self._vote(per_voter, page)
 
                 self._ledger.write_page(
                     document_id=str(conv_res.input.file),
@@ -270,6 +285,25 @@ class CascadeOcrModel(BaseOcrModel):
                     _log.warning("Voter %s failed: %s", voter.name, e)
                     per_voter[voter.name] = []
         return per_voter
+
+    @staticmethod
+    def _sampled_voters(lazy_voters):
+        """Pick lazy voters that should fire under sample_rate this page.
+
+        For each voter with ``sample_rate > 0``, draw a uniform random
+        number; if it falls below ``sample_rate``, include the voter in
+        the returned list. Voters with ``sample_rate == 0`` are NEVER
+        sampled — they only fire on disagreement.
+        """
+        import random as _random
+        out = []
+        for v in lazy_voters:
+            sr = float(getattr(v, "sample_rate", 0.0) or 0.0)
+            if sr <= 0.0:
+                continue
+            if _random.random() < sr:
+                out.append(v)
+        return out
 
     @staticmethod
     def _disagreement_rects(diagnostics, page, *, threshold: int):

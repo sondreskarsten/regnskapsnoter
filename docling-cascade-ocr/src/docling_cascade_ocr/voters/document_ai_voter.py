@@ -136,7 +136,9 @@ class DocumentAiVoter(BaseVoter):
         import google.auth.transport.requests
         import requests
 
-        creds, _ = google.auth.default()
+        creds, _ = google.auth.default(
+            scopes=["https://www.googleapis.com/auth/cloud-platform"],
+        )
         creds.refresh(google.auth.transport.requests.Request())
 
         url = (

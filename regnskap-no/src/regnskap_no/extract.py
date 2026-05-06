@@ -98,7 +98,9 @@ class GeminiClient:
                 "Install with: pip install google-auth requests"
             ) from e
 
-        creds, project = google.auth.default()
+        creds, project = google.auth.default(
+            scopes=["https://www.googleapis.com/auth/cloud-platform"],
+        )
         creds.refresh(google.auth.transport.requests.Request())
         project = self.project_id or project
 

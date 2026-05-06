@@ -40,6 +40,31 @@ class CascadeSummary:
     voters_column_dropped_pages: Dict[str, int] = field(default_factory=dict)
     n_voters: int = 0
 
+    # Independence groups (set from CascadeOcrOptions.voter_groups by the model).
+    # Voters in the same group are correlated; effective_n_voters counts
+    # each group as one independent observation.
+    voter_groups: List[List[str]] = field(default_factory=list)
+
+    @property
+    def effective_n_voters(self) -> int:
+        """Independence-adjusted voter count.
+
+        Each voter_group counts as 1 regardless of its size. Voters not
+        in any group count as 1 each. If no groups are configured, this
+        equals n_voters.
+        """
+        if not self.voter_groups:
+            return self.n_voters
+        grouped = set()
+        n_groups = 0
+        for group in self.voter_groups:
+            members_present = [v for v in group if v in self.voters_attempted]
+            if members_present:
+                n_groups += 1
+                grouped.update(members_present)
+        ungrouped = sum(1 for v in self.voters_attempted if v not in grouped)
+        return n_groups + ungrouped
+
     def update_from_bbox(self, diagnostics: dict, threshold: int) -> None:
         """Fold one page's bbox-vote diagnostics into the summary."""
         page_dropped: List[str] = []
@@ -86,6 +111,8 @@ class CascadeSummary:
         return {
             "n_pages": self.n_pages,
             "n_voters": self.n_voters,
+            "effective_n_voters": self.effective_n_voters,
+            "voter_groups": [list(g) for g in self.voter_groups],
             "voters_attempted": list(self.voters_attempted),
             "voters_column_dropped_pages": dict(self.voters_column_dropped_pages),
             "n_clusters_total": self.n_clusters_total,

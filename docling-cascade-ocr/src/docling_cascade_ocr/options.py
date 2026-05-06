@@ -111,6 +111,22 @@ class CascadeOcrOptions(OcrOptions):
     # Audit
     audit_ledger_path: Optional[str] = None
 
+    # Voter independence groups (item 3 of empirical validation plan).
+    # Voters in the same group are correlated — they share an underlying
+    # engine and produce near-identical outputs. The group list is used
+    # by CascadeSummary.effective_n_voters to compute an independence-
+    # adjusted voter count.
+    #
+    # Empirical finding (Fana fixture, 60 pages):
+    #   tesseract_psm6 × docling_default_psm3 = 0.952 Jaccard
+    #   tesseract_tsv is independent (0.113 Jaccard with either)
+    #
+    # Each inner list is a group of correlated voter names. Voters not
+    # listed in any group are assumed independent (group size 1).
+    voter_groups: List[List[str]] = Field(default_factory=lambda: [
+        ["tesseract", "docling_default"],  # 0.952 Jaccard on Fana
+    ])
+
     # Engine-shared OCR knobs
     lang: List[str] = Field(default_factory=lambda: ["no", "nb", "nn", "en"])
     bitmap_area_threshold: float = 0.05

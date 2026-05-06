@@ -107,6 +107,7 @@ class CascadeOcrModel(BaseOcrModel):
         self._summary = CascadeSummary()
         self._summary.voters_attempted = [v.name for v in self._voters]
         self._summary.n_voters = len(self._voters)
+        self._summary.voter_groups = list(self.options.voter_groups)
 
         for page in page_batch:
             assert page._backend is not None

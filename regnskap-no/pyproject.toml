@@ -20,7 +20,11 @@ dependencies = [
 shacl = ["rdflib>=7.0", "pyshacl>=0.25"]
 fuzzy = ["rapidfuzz>=3.0"]
 embed = ["sentence-transformers>=2.7"]
+mcp = ["mcp>=1.0"]
 dev = ["pytest>=7"]
+
+[project.scripts]
+regnskap-no-mcp = "regnskap_no.mcp_server:main"
 
 [project.urls]
 Homepage = "https://github.com/sondreskarsten/regnskapsnoter"

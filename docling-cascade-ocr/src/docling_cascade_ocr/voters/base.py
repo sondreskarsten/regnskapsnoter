@@ -59,6 +59,7 @@ def build_voters(specs, *, lang, use_gpu) -> List[BaseVoter]:
     from .doctr_voter import DoctrVoter
     from .easyocr_voter import EasyOcrVoter
     from .pix2struct_voter import Pix2StructVoter
+    from .docling_default_voter import DoclingDefaultVoter
 
     registry = {
         "ocrmypdf": OcrmypdfVoter,
@@ -68,6 +69,7 @@ def build_voters(specs, *, lang, use_gpu) -> List[BaseVoter]:
         "doctr": DoctrVoter,
         "easyocr": EasyOcrVoter,
         "pix2struct": Pix2StructVoter,
+        "docling_default": DoclingDefaultVoter,
     }
     out: List[BaseVoter] = []
     for spec in specs:

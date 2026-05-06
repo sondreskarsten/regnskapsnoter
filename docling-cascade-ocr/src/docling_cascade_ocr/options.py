@@ -41,6 +41,7 @@ class CascadeVoter(BaseModel):
 
 def _default_voters() -> List[CascadeVoter]:
     return [
+        # Production 7 from ocr-cascade-eval v2
         CascadeVoter(name="ocrmypdf"),
         CascadeVoter(name="tesseract"),
         CascadeVoter(name="tesseract_tsv"),
@@ -48,6 +49,9 @@ def _default_voters() -> List[CascadeVoter]:
         CascadeVoter(name="doctr"),
         CascadeVoter(name="easyocr"),
         CascadeVoter(name="pix2struct", enabled=False),
+        # Wrap-pattern (audit C1): always include Docling's stock default
+        # so the cascade is never worse than vanilla Docling.
+        CascadeVoter(name="docling_default"),
     ]
 
 

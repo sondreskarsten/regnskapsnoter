@@ -5,12 +5,27 @@ build-backend = "hatchling.build"
 [project]
 name = "regnskapsnoter-xbrl"
 version = "0.1.0"
-description = "Emit Inline XBRL (iXBRL) from regnskap-no facts"
+description = "Emit Inline XBRL (iXBRL 1.1) from regnskap-no facts"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [{name = "Sondre Skarsten"}]
-keywords = ["xbrl", "ixbrl", "regnskap", "norwegian", "accounting"]
+keywords = ["xbrl", "ixbrl", "regnskap", "norwegian", "accounting", "financial-reporting"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Accounting",
+    "Topic :: Text Processing :: Markup :: XML",
+    "Natural Language :: Norwegian",
+]
 dependencies = [
     "regnskap-no>=1.0.3",
     "lxml>=4.9",
@@ -22,6 +37,8 @@ dev = ["pytest>=7"]
 
 [project.urls]
 Homepage = "https://github.com/sondreskarsten/regnskapsnoter"
+Source = "https://github.com/sondreskarsten/regnskapsnoter/tree/main/regnskapsnoter-xbrl"
+Issues = "https://github.com/sondreskarsten/regnskapsnoter/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/regnskapsnoter_xbrl"]

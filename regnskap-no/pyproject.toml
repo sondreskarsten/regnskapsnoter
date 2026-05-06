@@ -11,6 +11,21 @@ requires-python = ">=3.10"
 license = {text = "CC-BY-4.0"}
 authors = [{name = "Sondre Skarsten"}]
 keywords = ["regnskap", "taxonomy", "xbrl", "skos", "wadm", "ifrs", "norwegian", "accounting"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Accounting",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Markup :: XML",
+    "Natural Language :: Norwegian",
+]
 dependencies = [
     "pyarrow>=15.0",
     "pydantic>=2.0",
@@ -29,6 +44,8 @@ regnskap-no-mcp = "regnskap_no.mcp_server:main"
 [project.urls]
 Homepage = "https://github.com/sondreskarsten/regnskapsnoter"
 Source = "https://github.com/sondreskarsten/regnskapnoter-taxonomy"
+Issues = "https://github.com/sondreskarsten/regnskapsnoter/issues"
+Documentation = "https://github.com/sondreskarsten/regnskapsnoter/blob/main/regnskap-no/README.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/regnskap_no"]

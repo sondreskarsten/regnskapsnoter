@@ -89,6 +89,16 @@ if _has_docling_eval():
             import os
             os.environ.setdefault("DOCLING_ALLOW_EXTERNAL_PLUGINS", "true")
 
+            # Monkey-patch the OCR factory to enable external plugin discovery.
+            # DocumentConverter does not expose allow_external_plugins; the
+            # default is False, which blocks the cascade entry_point. We
+            # patch the factory function to always pass True.
+            import docling.models.factories as _factories
+            _orig_get_ocr = _factories.get_ocr_factory
+            def _patched_get_ocr(allow_external_plugins=True):
+                return _orig_get_ocr(allow_external_plugins=True)
+            _factories.get_ocr_factory = _patched_get_ocr
+
             from docling.datamodel.base_models import (
                 ConversionStatus, InputFormat,
             )

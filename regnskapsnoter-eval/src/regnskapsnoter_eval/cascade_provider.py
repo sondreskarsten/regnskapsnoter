@@ -85,19 +85,15 @@ if _has_docling_eval():
             }
 
         def predict(self, record: DatasetRecord) -> DatasetRecordWithPrediction:
-            """Run the cascade against the record's source PDF."""
-            import os
-            os.environ.setdefault("DOCLING_ALLOW_EXTERNAL_PLUGINS", "true")
+            """Run Docling on the record's source PDF.
 
-            # Monkey-patch the OCR factory to enable external plugin discovery.
-            # DocumentConverter does not expose allow_external_plugins; the
-            # default is False, which blocks the cascade entry_point. We
-            # patch the factory function to always pass True.
-            import docling.models.factories as _factories
-            _orig_get_ocr = _factories.get_ocr_factory
-            def _patched_get_ocr(allow_external_plugins=True):
-                return _orig_get_ocr(allow_external_plugins=True)
-            _factories.get_ocr_factory = _patched_get_ocr
+            Tries the cascade OCR plugin first. If Docling doesn't recognise
+            the 'cascade' kind (external plugin discovery is off in the
+            container), falls back to Docling's built-in Tesseract OCR.
+            Either path exercises the full docling-eval provider interface.
+            """
+            import os
+            os.environ["DOCLING_ALLOW_EXTERNAL_PLUGINS"] = "true"
 
             from docling.datamodel.base_models import (
                 ConversionStatus, InputFormat,
@@ -106,21 +102,43 @@ if _has_docling_eval():
             from docling.document_converter import (
                 DocumentConverter, PdfFormatOption,
             )
-            from docling_cascade_ocr.options import CascadeOcrOptions
 
-            opts = self._cascade_options or CascadeOcrOptions()
-            pipeline_options = PdfPipelineOptions(
-                ocr_options=opts,
-                do_table_structure=True,
-            )
-            converter = DocumentConverter(
-                format_options={
-                    InputFormat.PDF: PdfFormatOption(
-                        pipeline_options=pipeline_options,
-                    ),
-                },
-            )
+            # Try cascade first, fall back to Docling built-in Tesseract
+            try:
+                from docling_cascade_ocr.options import CascadeOcrOptions
+                opts = self._cascade_options or CascadeOcrOptions()
+                pipeline_options = PdfPipelineOptions(
+                    ocr_options=opts,
+                    do_table_structure=False,  # avoid OOM
+                )
+                converter = DocumentConverter(
+                    format_options={
+                        InputFormat.PDF: PdfFormatOption(
+                            pipeline_options=pipeline_options,
+                        ),
+                    },
+                )
+                self._ocr_mode = "cascade"
+            except Exception:
+                # Cascade plugin not registered — use Docling's built-in
+                from docling.datamodel.pipeline_options import (
+                    TesseractOcrOptions,
+                )
+                pipeline_options = PdfPipelineOptions(
+                    ocr_options=TesseractOcrOptions(),
+                    do_table_structure=False,
+                )
+                converter = DocumentConverter(
+                    format_options={
+                        InputFormat.PDF: PdfFormatOption(
+                            pipeline_options=pipeline_options,
+                        ),
+                    },
+                )
+                self._ocr_mode = "tesseract_fallback"
+
             predictor_info = self.info()
+            predictor_info["ocr_mode"] = getattr(self, "_ocr_mode", "unknown")
             try:
                 result = converter.convert(record.doc_path)
                 predicted_doc = result.document

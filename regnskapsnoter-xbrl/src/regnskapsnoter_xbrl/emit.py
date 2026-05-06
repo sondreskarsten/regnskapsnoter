@@ -130,7 +130,7 @@ def build_ixbrl(
     period_start: str,
     period_end: str,
     currency: str = "NOK",
-    schema_ref: str = "https://taxonomy.regnskap.no/v1/regnskap-no.xsd",
+    schema_ref: str = "https://raw.githubusercontent.com/sondreskarsten/regnskapsnoter/main/regnskap-no/src/regnskap_no/data/regnskap-no.xsd",
 ) -> bytes:
     """Build an iXBRL XHTML document from a list of facts.
 

@@ -1,0 +1,283 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:regnskap-no="https://taxonomy.regnskap.no/v1" targetNamespace="https://taxonomy.regnskap.no/v1" elementFormDefault="qualified">
+  <xs:import namespace="http://www.xbrl.org/2003/instance" schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"/>
+  <xs:element name="StyresignaturIndex" id="regnskap-no_StyresignaturIndex" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant"/>
+  <xs:element name="StyresignaturNavn" id="regnskap-no_StyresignaturNavn" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="BankinnskuddTotal" id="regnskap-no_BankinnskuddTotal" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="BundneSkattetrekksmidler" id="regnskap-no_BundneSkattetrekksmidler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="DriftskontoSaldo" id="regnskap-no_DriftskontoSaldo" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="Kassekreditt" id="regnskap-no_Kassekreditt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="SkyldigSkattetrekk" id="regnskap-no_SkyldigSkattetrekk" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="SperretAvSkatteetaten" id="regnskap-no_SperretAvSkatteetaten" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant"/>
+  <xs:element name="UbenytteteTrekkrettigheter" id="regnskap-no_UbenytteteTrekkrettigheter" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="AndreForskjeller" id="regnskap-no_AndreForskjeller" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="AnleggsmidlerTempDiff" id="regnskap-no_AnleggsmidlerTempDiff" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="AnvendelseFremforbartUnderskudd" id="regnskap-no_AnvendelseFremforbartUnderskudd" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="BetalbarSkattAaret" id="regnskap-no_BetalbarSkattAaret" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="EndringMidlertidigeForskjeller" id="regnskap-no_EndringMidlertidigeForskjeller" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="EndringUtsattSkattefordel" id="regnskap-no_EndringUtsattSkattefordel" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="FordringerTempDiff" id="regnskap-no_FordringerTempDiff" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="FremforbartUnderskudd" id="regnskap-no_FremforbartUnderskudd" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="NettoForskjeller" id="regnskap-no_NettoForskjeller" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="PermanenteSkatteforskjeller" id="regnskap-no_PermanenteSkatteforskjeller" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="ResultatForSkattSpesifisering" id="regnskap-no_ResultatForSkattSpesifisering" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="SkattUtland" id="regnskap-no_SkattUtland" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="SkattepliktigInntekt" id="regnskap-no_SkattepliktigInntekt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="SumMidlertidigeForskjeller" id="regnskap-no_SumMidlertidigeForskjeller" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="TilvirkningskontrakterTempDiff" id="regnskap-no_TilvirkningskontrakterTempDiff" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="UtsattSkattBalansefort" id="regnskap-no_UtsattSkattBalansefort" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="UtsattSkattSatsPct" id="regnskap-no_UtsattSkattSatsPct" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="instant"/>
+  <xs:element name="UtsattSkattefordelBalansefort" id="regnskap-no_UtsattSkattefordelBalansefort" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="InternFordringerGjeld" id="regnskap-no_InternFordringerGjeld" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="InternSalgsinntekterVarekostnad" id="regnskap-no_InternSalgsinntekterVarekostnad" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="RelatertPartKreditt" id="regnskap-no_RelatertPartKreditt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="OppfyllerOTP" id="regnskap-no_OppfyllerOTP" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration"/>
+  <xs:element name="PensjonsforpliktelserNetto" id="regnskap-no_PensjonsforpliktelserNetto" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="PensjonskostnadDB" id="regnskap-no_PensjonskostnadDB" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="PensjonskostnadDC" id="regnskap-no_PensjonskostnadDC" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="PliktigOTP" id="regnskap-no_PliktigOTP" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration"/>
+  <xs:element name="Notetekst" id="regnskap-no_Notetekst" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="RegnskapsperiodeBeskrivelse" id="regnskap-no_RegnskapsperiodeBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="RettvisendeBildeTilleggsopplysning" id="regnskap-no_RettvisendeBildeTilleggsopplysning" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="Sammenligningstall" id="regnskap-no_Sammenligningstall" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="VesentlighetVurdering" id="regnskap-no_VesentlighetVurdering" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="AvskrivningsmetodeBeskrivelse" id="regnskap-no_AvskrivningsmetodeBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="InntektsforingsprinsippBeskrivelse" id="regnskap-no_InntektsforingsprinsippBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="RegnskapsprinsipperBeskrivelse" id="regnskap-no_RegnskapsprinsipperBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="ValutaomregningsprinsippBeskrivelse" id="regnskap-no_ValutaomregningsprinsippBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="VarekostnadPrinsipp" id="regnskap-no_VarekostnadPrinsipp" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="AnvendsEgenkapitalmetoden" id="regnskap-no_AnvendsEgenkapitalmetoden" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration"/>
+  <xs:element name="AnvendsKostmetodeIS" id="regnskap-no_AnvendsKostmetodeIS" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration"/>
+  <xs:element name="ErSmaaForetakNRS8" id="regnskap-no_ErSmaaForetakNRS8" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration"/>
+  <xs:element name="RecognizesUtsattSkattefordel" id="regnskap-no_RecognizesUtsattSkattefordel" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration"/>
+  <xs:element name="BruttometodeAnvendelse" id="regnskap-no_BruttometodeAnvendelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="EgenkapitalmetodeAnvendelse" id="regnskap-no_EgenkapitalmetodeAnvendelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="KonsolideringsmetodeBeskrivelse" id="regnskap-no_KonsolideringsmetodeBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="KonsolideringsprinsippBeskrivelse" id="regnskap-no_KonsolideringsprinsippBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="MinoritetsinteresseBelop" id="regnskap-no_MinoritetsinteresseBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="AntallAnsatte" id="regnskap-no_AntallAnsatte" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration"/>
+  <xs:element name="AntallAnsatteFordeltKjonn" id="regnskap-no_AntallAnsatteFordeltKjonn" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="Arsverk" id="regnskap-no_Arsverk" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="duration"/>
+  <xs:element name="Folketrygdavgift" id="regnskap-no_Folketrygdavgift" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="Lonninger" id="regnskap-no_Lonninger" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="LonnskostnadAndreYtelser" id="regnskap-no_LonnskostnadAndreYtelser" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="LonnskostnadPensjon" id="regnskap-no_LonnskostnadPensjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="SosialeYtelser" id="regnskap-no_SosialeYtelser" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="AnleggsmiddelAkkumulerteAvskrivninger" id="regnskap-no_AnleggsmiddelAkkumulerteAvskrivninger" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="AnleggsmiddelAnskaffelseskost" id="regnskap-no_AnleggsmiddelAnskaffelseskost" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="AnleggsmiddelAnsvarsforsikring" id="regnskap-no_AnleggsmiddelAnsvarsforsikring" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="AnleggsmiddelAretsAvgang" id="regnskap-no_AnleggsmiddelAretsAvgang" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="AnleggsmiddelAretsAvskrivning" id="regnskap-no_AnleggsmiddelAretsAvskrivning" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="AnleggsmiddelAretsNedskrivning" id="regnskap-no_AnleggsmiddelAretsNedskrivning" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="AnleggsmiddelAretsTilgang" id="regnskap-no_AnleggsmiddelAretsTilgang" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="AnleggsmiddelAvskrivningssatsProsent" id="regnskap-no_AnleggsmiddelAvskrivningssatsProsent" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="duration"/>
+  <xs:element name="AnleggsmiddelBalansefortVerdi" id="regnskap-no_AnleggsmiddelBalansefortVerdi" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="AnleggsmiddelLevetidBeskrivelse" id="regnskap-no_AnleggsmiddelLevetidBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="AnleggsmiddelOkonomiskLevetid" id="regnskap-no_AnleggsmiddelOkonomiskLevetid" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="duration"/>
+  <xs:element name="GoodwillAvskrivningstid" id="regnskap-no_GoodwillAvskrivningstid" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="duration"/>
+  <xs:element name="BokfortVerdiPantsattEiendel" id="regnskap-no_BokfortVerdiPantsattEiendel" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="FordringForeldelseStatus" id="regnskap-no_FordringForeldelseStatus" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="FordringerForfallEttFemAr" id="regnskap-no_FordringerForfallEttFemAr" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="FordringerForfallOver5Ar" id="regnskap-no_FordringerForfallOver5Ar" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="FordringerKundefordringerInkluderendeAvsetning" id="regnskap-no_FordringerKundefordringerInkluderendeAvsetning" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="GarantiansvarOverforTredjepart" id="regnskap-no_GarantiansvarOverforTredjepart" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="GarantiansvarTotaltBelop" id="regnskap-no_GarantiansvarTotaltBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="Gjeld5arPlus" id="regnskap-no_Gjeld5arPlus" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="GjeldForfallEttFemAr" id="regnskap-no_GjeldForfallEttFemAr" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="GjeldForfallOver5Ar" id="regnskap-no_GjeldForfallOver5Ar" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="GjeldSikretMedPant" id="regnskap-no_GjeldSikretMedPant" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="GjeldUsikret" id="regnskap-no_GjeldUsikret" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="MellomvaerendeKonsernselskaper" id="regnskap-no_MellomvaerendeKonsernselskaper" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="PantsatteEiendelerBeskrivelse" id="regnskap-no_PantsatteEiendelerBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="EngangspostBelop" id="regnskap-no_EngangspostBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EngangspostBeskrivelse" id="regnskap-no_EngangspostBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="AksjekapitalAntallAksjer" id="regnskap-no_AksjekapitalAntallAksjer" substitutionGroup="xbrli:item" type="xbrli:sharesItemType" xbrli:periodType="instant"/>
+  <xs:element name="AksjekapitalPalydendeVerdi" id="regnskap-no_AksjekapitalPalydendeVerdi" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="instant"/>
+  <xs:element name="AksjeklasseRettigheterBeskrivelse" id="regnskap-no_AksjeklasseRettigheterBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="AksjonaerstrukturAntallAksjer" id="regnskap-no_AksjonaerstrukturAntallAksjer" substitutionGroup="xbrli:item" type="xbrli:sharesItemType" xbrli:periodType="instant"/>
+  <xs:element name="AksjonaerstrukturEierandel" id="regnskap-no_AksjonaerstrukturEierandel" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="instant"/>
+  <xs:element name="AksjonaerstrukturNavn" id="regnskap-no_AksjonaerstrukturNavn" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="AntallAksjerEgneAksjer" id="regnskap-no_AntallAksjerEgneAksjer" substitutionGroup="xbrli:item" type="xbrli:sharesItemType" xbrli:periodType="instant"/>
+  <xs:element name="StorteAksjonaererListe" id="regnskap-no_StorteAksjonaererListe" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="UtbytteForeslattBelop" id="regnskap-no_UtbytteForeslattBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="UtbyttePerAksje" id="regnskap-no_UtbyttePerAksje" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="duration"/>
+  <xs:element name="UtbytteUtdelt" id="regnskap-no_UtbytteUtdelt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="DatterselskapEierandel" id="regnskap-no_DatterselskapEierandel" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="instant"/>
+  <xs:element name="DatterselskapForretningskontor" id="regnskap-no_DatterselskapForretningskontor" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="DatterselskapNavn" id="regnskap-no_DatterselskapNavn" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="DatterselskapStemmeandel" id="regnskap-no_DatterselskapStemmeandel" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="instant"/>
+  <xs:element name="FelleskontrollertVirksomhetEierandel" id="regnskap-no_FelleskontrollertVirksomhetEierandel" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="instant"/>
+  <xs:element name="FelleskontrollertVirksomhetNavn" id="regnskap-no_FelleskontrollertVirksomhetNavn" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="TilknyttetSelskapBokfortVerdi" id="regnskap-no_TilknyttetSelskapBokfortVerdi" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="TilknyttetSelskapEierandel" id="regnskap-no_TilknyttetSelskapEierandel" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="instant"/>
+  <xs:element name="TilknyttetSelskapForretningskontor" id="regnskap-no_TilknyttetSelskapForretningskontor" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="TilknyttetSelskapNavn" id="regnskap-no_TilknyttetSelskapNavn" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="AvtaleOmSluttvederlag" id="regnskap-no_AvtaleOmSluttvederlag" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="GodtgjorelseDagligLeder" id="regnskap-no_GodtgjorelseDagligLeder" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="GodtgjorelseDagligLederBonusBelop" id="regnskap-no_GodtgjorelseDagligLederBonusBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="GodtgjorelseDagligLederNaturalytelser" id="regnskap-no_GodtgjorelseDagligLederNaturalytelser" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="GodtgjorelseDagligLederPensjon" id="regnskap-no_GodtgjorelseDagligLederPensjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="GodtgjorelseRevisorLovpalagt" id="regnskap-no_GodtgjorelseRevisorLovpalagt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="GodtgjorelseStyret" id="regnskap-no_GodtgjorelseStyret" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="LanTilLedendePersoner" id="regnskap-no_LanTilLedendePersoner" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="RevisorhonorarAndreTjenester" id="regnskap-no_RevisorhonorarAndreTjenester" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="RevisorhonorarLovpalagt" id="regnskap-no_RevisorhonorarLovpalagt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="EgenkapitalAarsresultat" id="regnskap-no_EgenkapitalAarsresultat" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EgenkapitalAvsattUtbytte" id="regnskap-no_EgenkapitalAvsattUtbytte" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="EgenkapitalInngaaendeBalanse" id="regnskap-no_EgenkapitalInngaaendeBalanse" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="EgenkapitalKapitalforhoyelse" id="regnskap-no_EgenkapitalKapitalforhoyelse" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EgenkapitalKapitalnedsettelse" id="regnskap-no_EgenkapitalKapitalnedsettelse" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="EgenkapitalKjopAvEgneAksjer" id="regnskap-no_EgenkapitalKjopAvEgneAksjer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="EgenkapitalKonsernbidragAvgitt" id="regnskap-no_EgenkapitalKonsernbidragAvgitt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="EgenkapitalKonsernbidragMottatt" id="regnskap-no_EgenkapitalKonsernbidragMottatt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EgenkapitalKorrigeringForFeil" id="regnskap-no_EgenkapitalKorrigeringForFeil" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EgenkapitalPrinsippendring" id="regnskap-no_EgenkapitalPrinsippendring" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EgenkapitalRollforwardBelop" id="regnskap-no_EgenkapitalRollforwardBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EgenkapitalSalgAvEgneAksjer" id="regnskap-no_EgenkapitalSalgAvEgneAksjer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EgenkapitalUtgaaendeBalanse" id="regnskap-no_EgenkapitalUtgaaendeBalanse" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="FortsattDriftBeskrivelse" id="regnskap-no_FortsattDriftBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="FortsattDriftForutsetning" id="regnskap-no_FortsattDriftForutsetning" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration"/>
+  <xs:element name="KontingentForpliktelseAnket" id="regnskap-no_KontingentForpliktelseAnket" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant"/>
+  <xs:element name="KontingentForpliktelseBelop" id="regnskap-no_KontingentForpliktelseBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="KontingentForpliktelseBeskrivelse" id="regnskap-no_KontingentForpliktelseBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="KontingentForpliktelseDomstol" id="regnskap-no_KontingentForpliktelseDomstol" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="Lawsuit" id="regnskap-no_Lawsuit" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="EstimertGjenvarendeTap" id="regnskap-no_EstimertGjenvarendeTap" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="ForskuddsfakturertProduksjon" id="regnskap-no_ForskuddsfakturertProduksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="InntektsfortIgangv" id="regnskap-no_InntektsfortIgangv" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="KostnaderOpptjentInntektTap" id="regnskap-no_KostnaderOpptjentInntektTap" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="NettoResultatfortIgangv" id="regnskap-no_NettoResultatfortIgangv" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="OpptjentIkkeFakturert" id="regnskap-no_OpptjentIkkeFakturert" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="SkattefunnForventetTilskudd" id="regnskap-no_SkattefunnForventetTilskudd" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="SkattefunnGodkjent" id="regnskap-no_SkattefunnGodkjent" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration"/>
+  <xs:element name="AksjekapitalAntallAksjerKlasse" id="regnskap-no_AksjekapitalAntallAksjerKlasse" substitutionGroup="xbrli:item" type="xbrli:sharesItemType" xbrli:periodType="instant"/>
+  <xs:element name="AnleggsmiddelOpptattAvskrivningBeskrivelse" id="regnskap-no_AnleggsmiddelOpptattAvskrivningBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="AntallAnsatteSnitt" id="regnskap-no_AntallAnsatteSnitt" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="duration"/>
+  <xs:element name="BetingetUtfallBeskrivelse" id="regnskap-no_BetingetUtfallBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="BetingetUtfallEstimertBelop" id="regnskap-no_BetingetUtfallEstimertBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="DatterselskapEgenkapitalverdi" id="regnskap-no_DatterselskapEgenkapitalverdi" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="DatterselskapResultatandel" id="regnskap-no_DatterselskapResultatandel" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="DriftsinntektGeografiskMarked" id="regnskap-no_DriftsinntektGeografiskMarked" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="DriftsinntektVirksomhetsomraade" id="regnskap-no_DriftsinntektVirksomhetsomraade" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EffektivSkattesats" id="regnskap-no_EffektivSkattesats" substitutionGroup="xbrli:item" type="xbrli:decimalItemType" xbrli:periodType="duration"/>
+  <xs:element name="EndringRegnskapsprinsippBeskrivelse" id="regnskap-no_EndringRegnskapsprinsippBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="EndringRegnskapsprinsippEffektBelop" id="regnskap-no_EndringRegnskapsprinsippEffektBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="FinansielleInstrumentVerdsettingsMetode" id="regnskap-no_FinansielleInstrumentVerdsettingsMetode" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="FinansielleInstrumentVirkeligVerdi" id="regnskap-no_FinansielleInstrumentVirkeligVerdi" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="GjeldRentevilkarBeskrivelse" id="regnskap-no_GjeldRentevilkarBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="GodtgjorelseRevisorAndreTjenester" id="regnskap-no_GodtgjorelseRevisorAndreTjenester" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="GodtgjorelseRevisorSkatterad" id="regnskap-no_GodtgjorelseRevisorSkatterad" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="InntektsforingMetodeBeskrivelse" id="regnskap-no_InntektsforingMetodeBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="KonsernregnskapPliktBeskrivelse" id="regnskap-no_KonsernregnskapPliktBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="LanLedendePersonerSaldo" id="regnskap-no_LanLedendePersonerSaldo" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="LonnskostnadFordeltStilling" id="regnskap-no_LonnskostnadFordeltStilling" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="MorselskapNavn" id="regnskap-no_MorselskapNavn" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="ObligatoriskTjenestepensjonBeskrivelse" id="regnskap-no_ObligatoriskTjenestepensjonBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="OverordnetMorselskapNavn" id="regnskap-no_OverordnetMorselskapNavn" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="instant"/>
+  <xs:element name="PresentasjonsvalutaStore" id="regnskap-no_PresentasjonsvalutaStore" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="RegnskapsprinsipperStoreBeskrivelse" id="regnskap-no_RegnskapsprinsipperStoreBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="SikkerhetsstillelseLedendePersonerBelop" id="regnskap-no_SikkerhetsstillelseLedendePersonerBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="SkattekostnadBetalbarBelop" id="regnskap-no_SkattekostnadBetalbarBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="SkattekostnadEndringUtsattSkattBelop" id="regnskap-no_SkattekostnadEndringUtsattSkattBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="StoreEnkelttransaksjonerBeskrivelse" id="regnskap-no_StoreEnkelttransaksjonerBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="TransaksjonerNaerstaendeParterBeskrivelse" id="regnskap-no_TransaksjonerNaerstaendeParterBeskrivelse" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration"/>
+  <xs:element name="VarerNedskrivningBelop" id="regnskap-no_VarerNedskrivningBelop" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="Aksjekapital" id="regnskap-no_Aksjekapital" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="AnnenEgenkapital" id="regnskap-no_AnnenEgenkapital" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="AnnenInnskuttEgenkapital" id="regnskap-no_AnnenInnskuttEgenkapital" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="Egenkapital" id="regnskap-no_Egenkapital" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="InnskuttEgenkapital" id="regnskap-no_InnskuttEgenkapital" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="OpptjentEgenkapital" id="regnskap-no_OpptjentEgenkapital" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="Overkurs" id="regnskap-no_Overkurs" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="UdekketTap" id="regnskap-no_UdekketTap" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="AksjerOgAndelerIForetakISammeKonsern" id="regnskap-no_AksjerOgAndelerIForetakISammeKonsern" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="AndreFordringer" id="regnskap-no_AndreFordringer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="AndreFordringerKortsiktig" id="regnskap-no_AndreFordringerKortsiktig" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="AndreInvesteringer" id="regnskap-no_AndreInvesteringer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="Anleggsmidler" id="regnskap-no_Anleggsmidler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="BankinnskuddKontanterOgLignende" id="regnskap-no_BankinnskuddKontanterOgLignende" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="DriftslosoreInventarVerktoyKontormaskinerOgLignende" id="regnskap-no_DriftslosoreInventarVerktoyKontormaskinerOgLignende" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="Eiendeler" id="regnskap-no_Eiendeler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="FinansielleAnleggsmidler" id="regnskap-no_FinansielleAnleggsmidler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="Fordringer" id="regnskap-no_Fordringer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="ForskningOgUtvikling" id="regnskap-no_ForskningOgUtvikling" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="Goodwill" id="regnskap-no_Goodwill" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="ImmaterielleEiendeler" id="regnskap-no_ImmaterielleEiendeler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="InvesteringerIAnnetForetakSammeKonsern" id="regnskap-no_InvesteringerIAnnetForetakSammeKonsern" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="InvesteringerIDatterselskap" id="regnskap-no_InvesteringerIDatterselskap" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="InvesteringerITilknyttetSelskapOgFelleskontrollertVirksomhet" id="regnskap-no_InvesteringerITilknyttetSelskapOgFelleskontrollertVirksomhet" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="InvesteringerOmlopsmidler" id="regnskap-no_InvesteringerOmlopsmidler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="KonsesjonerPatenterLisenserVaremerker" id="regnskap-no_KonsesjonerPatenterLisenserVaremerker" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="Kundefordringer" id="regnskap-no_Kundefordringer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="LanTilForetakISammeKonsern" id="regnskap-no_LanTilForetakISammeKonsern" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="LanTilTilknyttetSelskapOgFelleskontrollertVirksomhet" id="regnskap-no_LanTilTilknyttetSelskapOgFelleskontrollertVirksomhet" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="MarkedsbaserteAksjer" id="regnskap-no_MarkedsbaserteAksjer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="MaskinerOgAnlegg" id="regnskap-no_MaskinerOgAnlegg" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="Obligasjoner" id="regnskap-no_Obligasjoner" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="Omlopsmidler" id="regnskap-no_Omlopsmidler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="Pensjonsmidler" id="regnskap-no_Pensjonsmidler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="SkipRiggerFlyOgLignende" id="regnskap-no_SkipRiggerFlyOgLignende" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="TomterBygningerOgAnnenFastEiendom" id="regnskap-no_TomterBygningerOgAnnenFastEiendom" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="UtsattSkattefordel" id="regnskap-no_UtsattSkattefordel" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="Varer" id="regnskap-no_Varer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="VarigeDriftsmidler" id="regnskap-no_VarigeDriftsmidler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="debit"/>
+  <xs:element name="AndreAvsetningerForForpliktelser" id="regnskap-no_AndreAvsetningerForForpliktelser" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="AndreLangsiktigeForpliktelser" id="regnskap-no_AndreLangsiktigeForpliktelser" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="AnnenKortsiktigGjeld" id="regnskap-no_AnnenKortsiktigGjeld" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="AnnenLangsiktigGjeld" id="regnskap-no_AnnenLangsiktigGjeld" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="AvsetningForForpliktelser" id="regnskap-no_AvsetningForForpliktelser" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="BetalbarSkatt" id="regnskap-no_BetalbarSkatt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="Gjeld" id="regnskap-no_Gjeld" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="GjeldTilForetakSammeKonsern" id="regnskap-no_GjeldTilForetakSammeKonsern" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="GjeldTilKredittinstitusjoner" id="regnskap-no_GjeldTilKredittinstitusjoner" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="GjeldTilKredittinstitusjonerKortsiktig" id="regnskap-no_GjeldTilKredittinstitusjonerKortsiktig" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="KonvertibleLan" id="regnskap-no_KonvertibleLan" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="KonvertibleLanKortsiktig" id="regnskap-no_KonvertibleLanKortsiktig" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="KortsiktigGjeld" id="regnskap-no_KortsiktigGjeld" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="Leverandorgjeld" id="regnskap-no_Leverandorgjeld" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="ObligasjonsLan" id="regnskap-no_ObligasjonsLan" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="Pensjonsforpliktelser" id="regnskap-no_Pensjonsforpliktelser" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="SertifikatLan" id="regnskap-no_SertifikatLan" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="SkyldigeOffentligeAvgifter" id="regnskap-no_SkyldigeOffentligeAvgifter" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="UtbytteForeslatt" id="regnskap-no_UtbytteForeslatt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="UtsattSkatt" id="regnskap-no_UtsattSkatt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="instant" xbrli:balance="credit"/>
+  <xs:element name="Aarsresultat" id="regnskap-no_Aarsresultat" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="AnnenDriftsinntekt" id="regnskap-no_AnnenDriftsinntekt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="AnnenDriftskostnad" id="regnskap-no_AnnenDriftskostnad" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="AnnenFinansinntekt" id="regnskap-no_AnnenFinansinntekt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="AnnenFinanskostnad" id="regnskap-no_AnnenFinanskostnad" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="AvskrivningVarigeDriftsmidlerOgImmaterielleEiendeler" id="regnskap-no_AvskrivningVarigeDriftsmidlerOgImmaterielleEiendeler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="Driftsresultat" id="regnskap-no_Driftsresultat" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EndringBeholdningEgentilvirkedeAnleggsmidler" id="regnskap-no_EndringBeholdningEgentilvirkedeAnleggsmidler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="EndringBeholdningVarerUnderTilvirkningOgFerdigeVarer" id="regnskap-no_EndringBeholdningVarerUnderTilvirkningOgFerdigeVarer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="InntektAndreInvesteringer" id="regnskap-no_InntektAndreInvesteringer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="InntektInvesteringDatterselskapOgTilknyttetSelskap" id="regnskap-no_InntektInvesteringDatterselskapOgTilknyttetSelskap" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="Lonnskostnad" id="regnskap-no_Lonnskostnad" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="NedskrivningFinansielleEiendeler" id="regnskap-no_NedskrivningFinansielleEiendeler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="NedskrivningVarigeDriftsmidlerOgImmaterielleEiendeler" id="regnskap-no_NedskrivningVarigeDriftsmidlerOgImmaterielleEiendeler" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="RenteinntektForetakSammeKonsern" id="regnskap-no_RenteinntektForetakSammeKonsern" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="RentekostnadForetakSammeKonsern" id="regnskap-no_RentekostnadForetakSammeKonsern" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="ResultatForSkattekostnad" id="regnskap-no_ResultatForSkattekostnad" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="Resultatregnskap" id="regnskap-no_Resultatregnskap" substitutionGroup="xbrli:item" type="xbrli:stringItemType" xbrli:periodType="duration" abstract="true"/>
+  <xs:element name="Salgsinntekt" id="regnskap-no_Salgsinntekt" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="Skattekostnad" id="regnskap-no_Skattekostnad" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="SumDriftsinntekter" id="regnskap-no_SumDriftsinntekter" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="Varekostnad" id="regnskap-no_Varekostnad" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="VerdiendringFinansielleInstrumenterTilVirkeligVerdi" id="regnskap-no_VerdiendringFinansielleInstrumenterTilVirkeligVerdi" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="AarsresultatFunksjon" id="regnskap-no_AarsresultatFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="AdministrativeKostnader" id="regnskap-no_AdministrativeKostnader" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="AnnenFinansinntektFunksjon" id="regnskap-no_AnnenFinansinntektFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="AnnenFinanskostnadFunksjon" id="regnskap-no_AnnenFinanskostnadFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="BruttoresultatFunksjon" id="regnskap-no_BruttoresultatFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="Distribusjonskostnader" id="regnskap-no_Distribusjonskostnader" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="DriftsresultatFunksjon" id="regnskap-no_DriftsresultatFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="InntektAndreInvesteringerFunksjon" id="regnskap-no_InntektAndreInvesteringerFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="InntektInvesteringDatterselskapOgTilknyttetSelskapFunksjon" id="regnskap-no_InntektInvesteringDatterselskapOgTilknyttetSelskapFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="KostnadSolgteVarer" id="regnskap-no_KostnadSolgteVarer" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="RenteinntektForetakSammeKonsernFunksjon" id="regnskap-no_RenteinntektForetakSammeKonsernFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="RentekostnadForetakSammeKonsernFunksjon" id="regnskap-no_RentekostnadForetakSammeKonsernFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="ResultatForSkattekostnadFunksjon" id="regnskap-no_ResultatForSkattekostnadFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="SalgsinntektFunksjon" id="regnskap-no_SalgsinntektFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+  <xs:element name="SkattekostnadFunksjon" id="regnskap-no_SkattekostnadFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="debit"/>
+  <xs:element name="VerdiendringFinansielleInstrumenterTilVirkeligVerdiFunksjon" id="regnskap-no_VerdiendringFinansielleInstrumenterTilVirkeligVerdiFunksjon" substitutionGroup="xbrli:item" type="xbrli:monetaryItemType" xbrli:periodType="duration" xbrli:balance="credit"/>
+</xs:schema>

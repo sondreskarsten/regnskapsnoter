@@ -143,11 +143,47 @@ if _has_docling_eval():
                 result = converter.convert(record.doc_path)
                 predicted_doc = result.document
                 status = ConversionStatus.SUCCESS
+            except RuntimeError as e:
+                if "No class found" in str(e) and "cascade" in str(e):
+                    # Cascade plugin not registered at convert time —
+                    # rebuild converter with built-in Tesseract and retry
+                    from docling.datamodel.pipeline_options import (
+                        TesseractOcrOptions,
+                    )
+                    fallback_opts = PdfPipelineOptions(
+                        ocr_options=TesseractOcrOptions(),
+                        do_table_structure=False,
+                    )
+                    converter = DocumentConverter(
+                        format_options={
+                            InputFormat.PDF: PdfFormatOption(
+                                pipeline_options=fallback_opts,
+                            ),
+                        },
+                    )
+                    self._ocr_mode = "tesseract_fallback"
+                    predictor_info["ocr_mode"] = "tesseract_fallback"
+                    try:
+                        result = converter.convert(record.doc_path)
+                        predicted_doc = result.document
+                        status = ConversionStatus.SUCCESS
+                    except Exception as e2:
+                        predicted_doc = None
+                        status = ConversionStatus.FAILURE
+                        predictor_info = {
+                            **predictor_info,
+                            "error": f"{type(e2).__name__}: {e2}",
+                        }
+                else:
+                    predicted_doc = None
+                    status = ConversionStatus.FAILURE
+                    predictor_info = {
+                        **predictor_info,
+                        "error": f"{type(e).__name__}: {e}",
+                    }
             except Exception as e:
                 predicted_doc = None
                 status = ConversionStatus.FAILURE
-                # Surface the cause via predictor_info — the schema
-                # only has a status enum, not a free-form error field.
                 predictor_info = {
                     **predictor_info,
                     "error": f"{type(e).__name__}: {e}",

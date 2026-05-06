@@ -90,6 +90,85 @@ def _page_of_item(item) -> int:
         return 1
 
 
+def _writeback_facts_to_document(document, annotations, *, pdf_uri: str) -> None:
+    """Append a single KeyValueItem with one GraphCell per resolved fact.
+
+    Audit C8 — the previous design returned annotations only as a separate
+    list. Downstream consumers reading just the DoclingDocument lost the
+    enrichment. This writeback puts the resolved facts where any
+    DoclingDocument consumer expects key-value extractions: in
+    ``document.key_value_items``.
+
+    Each fact becomes one GraphCell whose ``text`` is the concept_id +
+    value, and whose ``orig`` carries the original label text. The fact's
+    full WADM annotation is preserved separately in
+    ``EnrichmentResult.annotations``; this writeback is the lightweight
+    in-document mirror.
+    """
+    if not annotations:
+        return
+    try:
+        from docling_core.types.doc.document import (
+            GraphCell, GraphData, GraphLink, KeyValueItem,
+        )
+        from docling_core.types.doc.labels import GraphCellLabel, GraphLinkLabel
+    except ImportError:
+        # Older docling-core: silently skip writeback
+        return
+
+    cells = []
+    for i, ann in enumerate(annotations):
+        # WADM annotation body shape:
+        #   body[0]: SpecificResource(source='regnskap-no:ConceptId', purpose='classifying')
+        #   body[1]: TextualBody(value='1234', purpose='tagging')
+        if not ann.body or len(ann.body) < 1:
+            continue
+        concept_id = getattr(ann.body[0], "source", None)
+        if concept_id is None:
+            continue
+        value_text = ""
+        if len(ann.body) >= 2:
+            value_text = str(getattr(ann.body[1], "value", "") or "")
+
+        key_cell = GraphCell(
+            label=GraphCellLabel.KEY,
+            cell_id=2 * i,
+            text=str(concept_id),
+            orig=str(concept_id),
+        )
+        val_cell = GraphCell(
+            label=GraphCellLabel.VALUE,
+            cell_id=2 * i + 1,
+            text=value_text,
+            orig=value_text,
+        )
+        cells.append(key_cell)
+        cells.append(val_cell)
+
+    if not cells:
+        return
+
+    links = [
+        GraphLink(
+            label=GraphLinkLabel.TO_VALUE,
+            source_cell_id=cells[i].cell_id,
+            target_cell_id=cells[i + 1].cell_id,
+        )
+        for i in range(0, len(cells), 2)
+    ]
+
+    # KeyValueItem.self_ref must match #/key_value_items/<int>; use the
+    # current length as the index so multiple writebacks append cleanly.
+    next_index = len(getattr(document, "key_value_items", None) or [])
+    kvi = KeyValueItem(
+        graph=GraphData(cells=cells, links=links),
+        self_ref=f"#/key_value_items/{next_index}",
+    )
+    if not hasattr(document, "key_value_items") or document.key_value_items is None:
+        document.key_value_items = []
+    document.key_value_items.append(kvi)
+
+
 def enrich(
     document,
     *,
@@ -100,6 +179,7 @@ def enrich(
     cascade_voters_total: Optional[int] = None,
     creator_id: str = "urn:regnskapsnoter:pipeline:dev",
     validate: bool = True,
+    writeback_to_document: bool = False,
 ) -> EnrichmentResult:
     """Enrich a Docling-converted document.
 
@@ -112,6 +192,11 @@ def enrich(
         cascade_voters_total: total number of voters in the cascade run, for
             populating ``registrum:cascadeConfidence``.
         validate: whether to run the SHACL fact-level validator on the batch.
+        writeback_to_document: if True, also append a ``KeyValueItem`` to
+            ``document.key_value_items`` containing the resolved facts.
+            Audit C8: this lets downstream consumers reading just the
+            DoclingDocument see the enrichment without depending on
+            ``EnrichmentResult.annotations``.
 
     Returns:
         ``EnrichmentResult`` with all annotations and a validation report.
@@ -180,4 +265,8 @@ def enrich(
 
     if validate:
         result.validation = validate_facts(result.annotations)
+
+    if writeback_to_document:
+        _writeback_facts_to_document(document, result.annotations, pdf_uri=pdf_uri)
+
     return result

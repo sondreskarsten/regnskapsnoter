@@ -1,0 +1,207 @@
+{
+  "version": "v1.0.3",
+  "description": "50 (label, concept_id) golden pairs. Tie-break for label collisions prefers the \"art\" form (non-Funksjon) over the \"funksjon\" form. Canonicalizer must achieve 100% on this set.",
+  "tie_break": "prefer non-Funksjon variant",
+  "items": [
+    {
+      "label": "Administrative kostnader",
+      "concept_id": "regnskap-no:AdministrativeKostnader"
+    },
+    {
+      "label": "Akkumulerte avskrivninger",
+      "concept_id": "regnskap-no:AnleggsmiddelAkkumulerteAvskrivninger"
+    },
+    {
+      "label": "Aksjekapital",
+      "concept_id": "regnskap-no:Aksjekapital"
+    },
+    {
+      "label": "Aksjer og andeler i foretak i samme konsern",
+      "concept_id": "regnskap-no:AksjerOgAndelerIForetakISammeKonsern"
+    },
+    {
+      "label": "Aksjonær - antall aksjer",
+      "concept_id": "regnskap-no:AksjonaerstrukturAntallAksjer"
+    },
+    {
+      "label": "Aksjonær - eierandel i prosent",
+      "concept_id": "regnskap-no:AksjonaerstrukturEierandel"
+    },
+    {
+      "label": "Aksjonær - navn",
+      "concept_id": "regnskap-no:AksjonaerstrukturNavn"
+    },
+    {
+      "label": "Andre avsetninger for forpliktelser",
+      "concept_id": "regnskap-no:AndreAvsetningerForForpliktelser"
+    },
+    {
+      "label": "Andre fordringer",
+      "concept_id": "regnskap-no:AndreFordringer"
+    },
+    {
+      "label": "Andre forskjeller",
+      "concept_id": "regnskap-no:AndreForskjeller"
+    },
+    {
+      "label": "Andre investeringer",
+      "concept_id": "regnskap-no:AndreInvesteringer"
+    },
+    {
+      "label": "Andre langsiktige forpliktelser",
+      "concept_id": "regnskap-no:AndreLangsiktigeForpliktelser"
+    },
+    {
+      "label": "Andre ytelser",
+      "concept_id": "regnskap-no:LonnskostnadAndreYtelser"
+    },
+    {
+      "label": "Anleggsmidler",
+      "concept_id": "regnskap-no:Anleggsmidler"
+    },
+    {
+      "label": "Anleggsmidler - midlertidig forskjell",
+      "concept_id": "regnskap-no:AnleggsmidlerTempDiff"
+    },
+    {
+      "label": "Annen driftsinntekt",
+      "concept_id": "regnskap-no:AnnenDriftsinntekt"
+    },
+    {
+      "label": "Annen driftskostnad",
+      "concept_id": "regnskap-no:AnnenDriftskostnad"
+    },
+    {
+      "label": "Annen egenkapital",
+      "concept_id": "regnskap-no:AnnenEgenkapital"
+    },
+    {
+      "label": "Annen finansinntekt",
+      "concept_id": "regnskap-no:AnnenFinansinntekt"
+    },
+    {
+      "label": "Annen finanskostnad",
+      "concept_id": "regnskap-no:AnnenFinanskostnad"
+    },
+    {
+      "label": "Annen innskutt egenkapital",
+      "concept_id": "regnskap-no:AnnenInnskuttEgenkapital"
+    },
+    {
+      "label": "Annen kortsiktig gjeld",
+      "concept_id": "regnskap-no:AnnenKortsiktigGjeld"
+    },
+    {
+      "label": "Annen langsiktig gjeld",
+      "concept_id": "regnskap-no:AnnenLangsiktigGjeld"
+    },
+    {
+      "label": "Anskaffelseskost anleggsmiddel",
+      "concept_id": "regnskap-no:AnleggsmiddelAnskaffelseskost"
+    },
+    {
+      "label": "Ansvarsforsikring for anleggsmidler",
+      "concept_id": "regnskap-no:AnleggsmiddelAnsvarsforsikring"
+    },
+    {
+      "label": "Antall aksjer",
+      "concept_id": "regnskap-no:AksjekapitalAntallAksjer"
+    },
+    {
+      "label": "Antall aksjer per klasse",
+      "concept_id": "regnskap-no:AksjekapitalAntallAksjerKlasse"
+    },
+    {
+      "label": "Antall ansatte",
+      "concept_id": "regnskap-no:AntallAnsatte"
+    },
+    {
+      "label": "Antall ansatte fordelt på kjønn",
+      "concept_id": "regnskap-no:AntallAnsatteFordeltKjonn"
+    },
+    {
+      "label": "Antall egne aksjer",
+      "concept_id": "regnskap-no:AntallAksjerEgneAksjer"
+    },
+    {
+      "label": "Antall årsverk",
+      "concept_id": "regnskap-no:Arsverk"
+    },
+    {
+      "label": "Anvendelse av bruttometoden",
+      "concept_id": "regnskap-no:BruttometodeAnvendelse"
+    },
+    {
+      "label": "Anvendelse av egenkapitalmetoden",
+      "concept_id": "regnskap-no:EgenkapitalmetodeAnvendelse"
+    },
+    {
+      "label": "Anvendelse av fremførbart underskudd",
+      "concept_id": "regnskap-no:AnvendelseFremforbartUnderskudd"
+    },
+    {
+      "label": "Anvender egenkapitalmetoden",
+      "concept_id": "regnskap-no:AnvendsEgenkapitalmetoden"
+    },
+    {
+      "label": "Anvender kostmetoden for investeringer i datterselskap",
+      "concept_id": "regnskap-no:AnvendsKostmetodeIS"
+    },
+    {
+      "label": "Avgang anleggsmiddel",
+      "concept_id": "regnskap-no:AnleggsmiddelAretsAvgang"
+    },
+    {
+      "label": "Avsatt utbytte (egenkapital)",
+      "concept_id": "regnskap-no:EgenkapitalAvsattUtbytte"
+    },
+    {
+      "label": "Avsetning for forpliktelser",
+      "concept_id": "regnskap-no:AvsetningForForpliktelser"
+    },
+    {
+      "label": "Avskrivning på varige driftsmidler og immaterielle eiendeler",
+      "concept_id": "regnskap-no:AvskrivningVarigeDriftsmidlerOgImmaterielleEiendeler"
+    },
+    {
+      "label": "Avskrivningsmetode",
+      "concept_id": "regnskap-no:AvskrivningsmetodeBeskrivelse"
+    },
+    {
+      "label": "Avskrivningssats i prosent",
+      "concept_id": "regnskap-no:AnleggsmiddelAvskrivningssatsProsent"
+    },
+    {
+      "label": "Avskrivningstid goodwill",
+      "concept_id": "regnskap-no:GoodwillAvskrivningstid"
+    },
+    {
+      "label": "Avtale om sluttvederlag",
+      "concept_id": "regnskap-no:AvtaleOmSluttvederlag"
+    },
+    {
+      "label": "Balansefører utsatt skattefordel",
+      "concept_id": "regnskap-no:RecognizesUtsattSkattefordel"
+    },
+    {
+      "label": "Balanseført verdi anleggsmiddel",
+      "concept_id": "regnskap-no:AnleggsmiddelBalansefortVerdi"
+    },
+    {
+      "label": "Bankinnskudd totalt",
+      "concept_id": "regnskap-no:BankinnskuddTotal"
+    },
+    {
+      "label": "Bankinnskudd, kontanter o.l.",
+      "concept_id": "regnskap-no:BankinnskuddKontanterOgLignende"
+    },
+    {
+      "label": "Beløp i egenkapital-rollforward",
+      "concept_id": "regnskap-no:EgenkapitalRollforwardBelop"
+    },
+    {
+      "label": "Beskrivelse av OTP-ordning",
+      "concept_id": "regnskap-no:ObligatoriskTjenestepensjonBeskrivelse"
+    }
+  ]
+}

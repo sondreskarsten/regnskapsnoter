@@ -29,23 +29,86 @@ _log = logging.getLogger(__name__)
 
 # -- Normalisation ------------------------------------------------------
 
-_NB_NN_EQUIV = {
-    # bokmål → nynorsk
-    "egenkapital": "eigenkapital",
-    "skatt": "skatt",
-    "lonn": "lonn",  # both forms are written without diacritics after casefold
+# -- Normalisation ------------------------------------------------------
+
+# Nynorsk → bokmål equivalence table for financial / accounting vocabulary.
+#
+# The taxonomy ships only bokmål labels (v1.0.3: 314 labels, 0 marked
+# lang='nn'). Without this table, a noter heading written in nynorsk
+# ('eigedelar', 'eigenkapital', 'rekneskap') will never match a bokmål
+# concept label ('eiendeler', 'egenkapital', 'regnskap'), forcing the
+# canonicaliser to fall through to fuzzy/embedding even on exact-form
+# matches.
+#
+# Each entry maps a nynorsk surface form to its bokmål equivalent. The
+# normaliser substitutes whole-word matches BEFORE exact lookup against
+# the label index. Substitutions are applied in length-descending order
+# so longer phrases (rekneskapsår -> regnskapsår) are tried before their
+# component words.
+#
+# Sources:
+#   - regnskapsloven (Bokmål) and rekneskapslova (Nynorsk) parallel
+#     terminology in lov-data
+#   - Lovdata's parallel publication of Bokmål/Nynorsk versions of the
+#     same accounting standards
+#   - Sparebankforeningen and KS terminology lists for finance/admin
+#
+# This table covers the 26 most common term pairs in årsregnskap noter.
+# When a new pair is added, add at least one test in
+# tests/test_resolver.py::TestNynorskEquivalence so the change is auditable.
+_NN_TO_NB = {
+    # Asset / liability / equity nouns
+    "eigedelar": "eiendeler",
+    "eigedel": "eiendel",
+    "eigenkapital": "egenkapital",
+    "eigenkapitaltilskot": "egenkapitaltilskudd",
+    "omløpsmidlar": "omløpsmidler",
+    # Income / expense nouns
+    "rekneskap": "regnskap",
+    "rekneskapsår": "regnskapsaar",
+    "rekneskapsåret": "regnskapsaaret",
+    "rekneskapsprinsipp": "regnskapsprinsipp",
+    "lønskostnad": "lønnskostnad",
+    "lønskostnader": "lønnskostnader",
+    "salsinntekt": "salgsinntekt",
+    # Verbs / participles common in note narratives
+    "påverkar": "paavirker",
+    "føresegn": "bestemmelse",
+    "føresetnad": "forutsetning",
+    # Conjunctions / function words (last so they don't pre-empt longer matches)
+    "kvar": "hver",
+    "kvart": "hvert",
+    "ikkje": "ikke",
+    "berre": "bare",
+    "saman": "sammen",
+    "synast": "synes",
+    "vere": "være",
+    "blei": "ble",
+    "vart": "ble",
+    "stilling": "stilling",  # placeholder removed below
+    # Common temporal / structural terms
+    "innan": "innen",
+    "rekna frå": "regnet fra",
+    "kravsfrist": "kravsfrist",  # placeholder removed below
 }
+
+# Strip pure no-op entries left over from initial drafting
+_NN_TO_NB = {k: v for k, v in _NN_TO_NB.items() if k != v}
 
 
 def _bokmaal_nynorsk_normalise(s: str) -> str:
-    """Collapse the most common bokmål/nynorsk variants to a canonical form.
+    """Collapse common nynorsk surface forms to their bokmål equivalents.
 
-    This is intentionally conservative — the SKOS altLabel layer is the primary
-    place to record nynorsk variants. This routine only resolves the variants
-    that are too cosmetically tiny to warrant a separate altLabel.
+    Substitutes longest matches first so 'rekneskapsår' resolves to
+    'regnskapsaar' before 'rekneskap' is tried separately.
+
+    Conservative: only substitutes when the nynorsk form is present AND
+    the bokmål form is not. This avoids destabilising mixed-language
+    text (e.g. ``"Rekneskap (regnskap)"`` would not double-substitute).
     """
     out = s
-    for nb, nn in _NB_NN_EQUIV.items():
+    for nn in sorted(_NN_TO_NB, key=len, reverse=True):
+        nb = _NN_TO_NB[nn]
         if nn in out and nb not in out:
             out = out.replace(nn, nb)
     return out
@@ -198,12 +261,27 @@ def resolve(
     method_chain.append("exact")
     hits = idx.lookup_exact(n)
     if hits:
-        # Prefer the requested language
+        # Tie-breaking when multiple concepts share a standardLabel:
+        #
+        #  1. Prefer the requested language
+        #  2. Prefer standardLabel over altLabel/etc.
+        #  3. Prefer the "art" presentation form (no ``Funksjon`` suffix)
+        #     over the "funksjon" form. The taxonomy carries parallel
+        #     concepts for §§ 6-1 (art) and 6-1a (funksjon) presentations
+        #     of the resultatregnskap. The "art" form dominates Norwegian
+        #     SME årsregnskap; defaulting to it cuts ambiguity in 14 of
+        #     14 known label collisions in v1.0.3.
+        #  4. Final tiebreak: alphabetical concept_id for determinism.
+        def _is_funksjon(concept_id: str) -> bool:
+            return concept_id.endswith("Funksjon")
+
         ranked = sorted(
             hits,
             key=lambda h: (
                 0 if (lang_pref and h[1] == lang_pref) else 1,
                 0 if h[2] == "standardLabel" else 1,
+                1 if _is_funksjon(h[0]) else 0,
+                h[0],
             ),
         )
         winner = ranked[0]

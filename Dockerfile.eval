@@ -1,0 +1,60 @@
+# Dockerfile for regnskapsnoter-eval-production
+# Cloud Run Job: europe-north1, 4 vCPU / 16 GiB, 3600s timeout
+#
+# Installs all 7 production OCR voters + docling-eval for items 4+6
+# of the empirical validation plan.
+
+FROM python:3.12-slim
+
+# System deps for Tesseract, PaddleOCR, EasyOCR
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    tesseract-ocr \
+    tesseract-ocr-nor \
+    tesseract-ocr-nob \
+    tesseract-ocr-eng \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    ocrmypdf \
+    fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install Python packages in dependency order
+COPY regnskap-no/ /app/regnskap-no/
+RUN pip install --no-cache-dir /app/regnskap-no/
+
+COPY noter-canonicalizer/ /app/noter-canonicalizer/
+RUN pip install --no-cache-dir /app/noter-canonicalizer/
+
+COPY regnskapsnoter-shacl/ /app/regnskapsnoter-shacl/
+RUN pip install --no-cache-dir /app/regnskapsnoter-shacl/
+
+COPY regnskapsnoter-wadm/ /app/regnskapsnoter-wadm/
+RUN pip install --no-cache-dir /app/regnskapsnoter-wadm/
+
+COPY docling-cascade-ocr/ /app/docling-cascade-ocr/
+RUN pip install --no-cache-dir /app/docling-cascade-ocr/
+
+COPY regnskapsnoter-pipeline/ /app/regnskapsnoter-pipeline/
+RUN pip install --no-cache-dir /app/regnskapsnoter-pipeline/
+
+COPY regnskapsnoter-eval/ /app/regnskapsnoter-eval/
+RUN pip install --no-cache-dir '/app/regnskapsnoter-eval/[docling-eval]'
+
+COPY regnskapsnoter-migration/ /app/regnskapsnoter-migration/
+RUN pip install --no-cache-dir /app/regnskapsnoter-migration/
+
+# Heavy OCR engines (PaddleOCR + EasyOCR + doctr)
+RUN pip install --no-cache-dir \
+    paddlepaddle paddleocr \
+    easyocr \
+    python-doctr[torch] \
+    PyMuPDF \
+    google-cloud-storage \
+    google-auth \
+    requests
+
+# Entrypoint: run whichever evaluation script is specified
+COPY scripts/eval_entrypoint.py /app/eval_entrypoint.py
+ENTRYPOINT ["python", "/app/eval_entrypoint.py"]

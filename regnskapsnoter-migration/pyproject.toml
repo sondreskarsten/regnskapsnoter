@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "regnskapsnoter-migration"
+version = "0.1.0"
+description = "Shadow-mode runner + per-concept drift dashboards for v1 → v2 migration"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Sondre Skarsten"}]
+dependencies = [
+    "regnskap-no>=1.0.3",
+    "pyarrow>=15.0",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.urls]
+Homepage = "https://github.com/sondreskarsten/regnskapsnoter"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/regnskapsnoter_migration"]

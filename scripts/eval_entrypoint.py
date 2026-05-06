@@ -133,6 +133,9 @@ def run_docling_eval():
     """
     from pathlib import Path
 
+    # Enable cascade OCR plugin discovery in Docling
+    os.environ["DOCLING_ALLOW_EXTERNAL_PLUGINS"] = "true"
+
     try:
         from docling.datamodel.base_models import ConversionStatus
         from docling_core.types.doc import DoclingDocument

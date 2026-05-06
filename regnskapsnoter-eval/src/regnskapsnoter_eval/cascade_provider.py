@@ -86,6 +86,9 @@ if _has_docling_eval():
 
         def predict(self, record: DatasetRecord) -> DatasetRecordWithPrediction:
             """Run the cascade against the record's source PDF."""
+            import os
+            os.environ.setdefault("DOCLING_ALLOW_EXTERNAL_PLUGINS", "true")
+
             from docling.datamodel.base_models import (
                 ConversionStatus, InputFormat,
             )

@@ -126,7 +126,13 @@ class CascadeOcrModel(BaseOcrModel):
                 # Normalise: voter coordinate system is page-coordinate (pre-scale)
                 scaled_rects = self._scale_rects(ocr_rects, scale=self.scale)
 
-                per_voter = self._run_voters(page_image, scaled_rects)
+                # Eager pass: run all non-lazy voters
+                eager_voters = [v for v in self._voters if not getattr(v, "lazy", False)]
+                lazy_voters = [v for v in self._voters if getattr(v, "lazy", False)]
+
+                per_voter = self._run_voters(
+                    page_image, scaled_rects, voters=eager_voters,
+                )
 
                 # Re-scale voter outputs back to page coordinates
                 per_voter = {
@@ -135,6 +141,30 @@ class CascadeOcrModel(BaseOcrModel):
                 }
 
                 consensus, diagnostics = self._vote(per_voter, page)
+
+                # Lazy pass: run lazy voters only on disagreement regions.
+                # Audit C3 — pix2struct (slow, expensive visual model) must
+                # only run where the eager voters couldn't reach consensus,
+                # not on every page region.
+                if lazy_voters:
+                    disagree_rects = self._disagreement_rects(
+                        diagnostics, page,
+                        threshold=self.options.min_voters_for_commit,
+                    )
+                    if disagree_rects:
+                        scaled_disagree = self._scale_rects(
+                            disagree_rects, scale=self.scale,
+                        )
+                        lazy_per_voter = self._run_voters(
+                            page_image, scaled_disagree, voters=lazy_voters,
+                        )
+                        lazy_per_voter = {
+                            name: [self._scale_cell_back(c, self.scale) for c in cells]
+                            for name, cells in lazy_per_voter.items()
+                        }
+                        # Merge lazy votes into the per-voter dict, then re-vote
+                        per_voter.update(lazy_per_voter)
+                        consensus, diagnostics = self._vote(per_voter, page)
 
                 self._ledger.write_page(
                     document_id=str(conv_res.input.file),
@@ -208,23 +238,77 @@ class CascadeOcrModel(BaseOcrModel):
 
     # ---- helpers ----
 
-    def _run_voters(self, page_image, ocr_rects):
-        """Run all voters in parallel, with per-voter timeout."""
+    def _run_voters(self, page_image, ocr_rects, *, voters=None):
+        """Run the given voter list in parallel with per-voter timeout.
+
+        Args:
+            page_image: rendered page raster.
+            ocr_rects: list of BoundingBox in image-pixel coordinates.
+            voters: optional explicit voter list. Defaults to ``self._voters``.
+        """
+        voter_list = voters if voters is not None else self._voters
         per_voter = {}
-        with ThreadPoolExecutor(max_workers=max(1, len(self._voters))) as ex:
-            futures = {ex.submit(v.run, page_image, ocr_rects): v for v in self._voters}
+        if not voter_list:
+            return per_voter
+        with ThreadPoolExecutor(max_workers=max(1, len(voter_list))) as ex:
+            futures = {ex.submit(v.run, page_image, ocr_rects): v for v in voter_list}
             for fut, voter in list(futures.items()):
-                spec = next(s for s in self.options.voters if s.name == voter.name)
+                # Best-effort timeout lookup; default to 60s if no spec matches
+                # (e.g. when callers inject voters directly for testing).
+                spec = next(
+                    (s for s in self.options.voters if s.name == voter.name),
+                    None,
+                )
+                timeout_s = spec.timeout_s if spec is not None else 60.0
                 try:
-                    cells = fut.result(timeout=spec.timeout_s)
+                    cells = fut.result(timeout=timeout_s)
                     per_voter[voter.name] = cells
                 except FuturesTimeout:
-                    _log.warning("Voter %s timed out (%.1fs)", voter.name, spec.timeout_s)
+                    _log.warning("Voter %s timed out (%.1fs)", voter.name, timeout_s)
                     per_voter[voter.name] = []
                 except Exception as e:
                     _log.warning("Voter %s failed: %s", voter.name, e)
                     per_voter[voter.name] = []
         return per_voter
+
+    @staticmethod
+    def _disagreement_rects(diagnostics, page, *, threshold: int):
+        """Extract bounding boxes of clusters where the eager voters disagreed.
+
+        A cluster is in disagreement when ``n_voters_hit < threshold`` —
+        below the commit bar. The lazy voters (e.g. pix2struct) run only
+        on these regions, so visual extraction is targeted not blanket.
+
+        Returns BoundingBoxes in PAGE coordinates (pre-scale). The caller
+        scales them up before passing to the voter.
+        """
+        from docling_core.types.doc import BoundingBox, CoordOrigin
+
+        out = []
+        seen = set()
+        for key, d in (diagnostics or {}).items():
+            if not key.startswith("cluster:"):
+                continue
+            n_hit = d.get("n_voters_hit", 0)
+            if n_hit >= threshold:
+                continue   # already committed
+            bbox = d.get("bbox")
+            if not bbox:
+                continue
+            l, t, r, b = bbox[0], bbox[1], bbox[2], bbox[3]
+            # Sanity: a degenerate zero-area rect would expand to the
+            # whole page when fed to a voter, defeating the point
+            if r <= l or b <= t:
+                continue
+            sig = (round(l, 1), round(t, 1), round(r, 1), round(b, 1))
+            if sig in seen:
+                continue
+            seen.add(sig)
+            out.append(BoundingBox(
+                l=l, t=t, r=r, b=b,
+                coord_origin=CoordOrigin.TOPLEFT,
+            ))
+        return out
 
     @staticmethod
     def _scale_rects(rects, *, scale):

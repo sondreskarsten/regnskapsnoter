@@ -32,6 +32,7 @@ class BaseVoter(ABC):
     """Abstract OCR voter."""
 
     name: str = "base"
+    lazy: bool = False  # set by build_voters from CascadeVoter.lazy
 
     def __init__(self, *, lang: List[str], use_gpu: bool = False) -> None:
         self.lang = lang
@@ -80,7 +81,10 @@ def build_voters(specs, *, lang, use_gpu) -> List[BaseVoter]:
             _log.warning("Unknown voter: %s", spec.name)
             continue
         try:
-            out.append(cls(lang=lang, use_gpu=use_gpu))
+            voter = cls(lang=lang, use_gpu=use_gpu)
+            # Annotate with the lazy flag so the model can split eager vs lazy
+            voter.lazy = bool(getattr(spec, "lazy", False))
+            out.append(voter)
         except VoterUnavailable as e:
             _log.warning("Skipping voter %s: %s", spec.name, e)
     return out

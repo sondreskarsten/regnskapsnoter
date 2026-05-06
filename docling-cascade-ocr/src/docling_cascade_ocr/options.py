@@ -31,12 +31,18 @@ class CascadeVoter(BaseModel):
     A voter is one independent observation mechanism. Disable a voter by setting
     ``enabled=False`` rather than removing it from the list, so the run record still
     documents which voters were considered for this configuration.
+
+    ``lazy=True`` voters are tiebreakers (audit C3): they run only on
+    regions where the eager voters disagreed. pix2struct is the canonical
+    lazy voter — visual extraction is too expensive to run on every page,
+    but cheap enough to call when the OCR cascade can't reach consensus.
     """
 
     name: VoterName
     enabled: bool = True
     weight: float = 1.0
     timeout_s: float = 60.0
+    lazy: bool = False
 
 
 def _default_voters() -> List[CascadeVoter]:
@@ -48,7 +54,9 @@ def _default_voters() -> List[CascadeVoter]:
         CascadeVoter(name="paddleocr"),
         CascadeVoter(name="doctr"),
         CascadeVoter(name="easyocr"),
-        CascadeVoter(name="pix2struct", enabled=False),
+        # pix2struct as a LAZY tiebreaker (audit C3) — runs only on
+        # regions where the eager voters disagreed
+        CascadeVoter(name="pix2struct", enabled=False, lazy=True),
         # Wrap-pattern (audit C1): always include Docling's stock default
         # so the cascade is never worse than vanilla Docling.
         CascadeVoter(name="docling_default"),

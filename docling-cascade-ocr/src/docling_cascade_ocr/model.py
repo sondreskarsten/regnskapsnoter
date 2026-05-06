@@ -68,6 +68,12 @@ class CascadeOcrModel(BaseOcrModel):
         self._voters = []
         self._ledger = AuditLedger(options.audit_ledger_path)
 
+        # Per-document cascade summary; mutated as pages are processed.
+        # Reset at the start of each ConversionResult; readable via
+        # ``self.summary``. See ``summary.py`` for the data class.
+        from .summary import CascadeSummary
+        self._summary = CascadeSummary()
+
         if not enabled:
             return
 
@@ -95,6 +101,12 @@ class CascadeOcrModel(BaseOcrModel):
         if not self.enabled or not self._voters:
             yield from page_batch
             return
+
+        # Reset the per-document summary at the start of each ConversionResult
+        from .summary import CascadeSummary
+        self._summary = CascadeSummary()
+        self._summary.voters_attempted = [v.name for v in self._voters]
+        self._summary.n_voters = len(self._voters)
 
         for page in page_batch:
             assert page._backend is not None
@@ -137,9 +149,24 @@ class CascadeOcrModel(BaseOcrModel):
                     ),
                 )
 
+                # Update per-document summary
+                self._summary.n_pages += 1
+                self._summary.update_from_bbox(diagnostics, self.options.min_voters_for_commit)
+                self._summary.update_from_token(diagnostics)
+
                 self.post_process_cells(consensus, page)
 
             yield page
+
+    @property
+    def summary(self):
+        """Per-document cascade roll-up.
+
+        Read after the cascade has finished processing a ConversionResult.
+        See :class:`CascadeSummary` for the shape; ``.to_dict()`` for a
+        JSON-serialisable form suitable for DoclingDocument metadata.
+        """
+        return self._summary
 
     def _vote(self, per_voter, page):
         """Dispatch the configured vote mode(s) and merge consensus.

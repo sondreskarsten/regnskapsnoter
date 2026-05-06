@@ -122,10 +122,10 @@ if _has_docling_eval():
             except Exception:
                 # Cascade plugin not registered — use Docling's built-in
                 from docling.datamodel.pipeline_options import (
-                    TesseractOcrOptions,
+                    TesseractCliOcrOptions,
                 )
                 pipeline_options = PdfPipelineOptions(
-                    ocr_options=TesseractOcrOptions(),
+                    ocr_options=TesseractCliOcrOptions(),
                     do_table_structure=False,
                 )
                 converter = DocumentConverter(
@@ -148,10 +148,10 @@ if _has_docling_eval():
                     # Cascade plugin not registered at convert time —
                     # rebuild converter with built-in Tesseract and retry
                     from docling.datamodel.pipeline_options import (
-                        TesseractOcrOptions,
+                        TesseractCliOcrOptions,
                     )
                     fallback_opts = PdfPipelineOptions(
-                        ocr_options=TesseractOcrOptions(),
+                        ocr_options=TesseractCliOcrOptions(),
                         do_table_structure=False,
                     )
                     converter = DocumentConverter(

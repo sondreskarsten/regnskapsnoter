@@ -40,3 +40,17 @@ def test_empty_page_has_no_evidence():
 
 def test_complete_value_in_single_line_cell():
     assert spatial_evidence([cell("Eiendeler 123 456", 0, 0, 100, 10)], {123456})[0]["values"] == [123456]
+
+
+def test_short_minus_token_from_live_filing():
+    cells = [
+        cell("Netto", 433, 2584, 604, 2617),
+        cell("finans", 646, 2580, 842, 2617),
+        cell("-", 2279, 2600, 2298, 2607),
+        cell("864", 2317, 2582, 2404, 2617),
+        cell("-1", 2904, 2582, 2963, 2617),
+        cell("347", 3004, 2582, 3100, 2617),
+    ]
+    evidence = spatial_evidence(cells, {-864, 864, -1347, -8641347})
+    assert {n for item in evidence for n in item["values"]} == {-864, -1347}
+    assert next(item for item in evidence if -864 in item["values"])["cell_indices"] == [2, 3]

@@ -90,6 +90,7 @@ class CascadeOcrOptions(OcrOptions):
     """
 
     kind: ClassVar[Literal["cascade"]] = "cascade"
+    canonicalize_lang: ClassVar[bool] = False
 
     voters: List[CascadeVoter] = Field(default_factory=_default_voters)
 
@@ -130,6 +131,5 @@ class CascadeOcrOptions(OcrOptions):
     # Engine-shared OCR knobs
     lang: List[str] = Field(default_factory=lambda: ["no", "nb", "nn", "en"])
     bitmap_area_threshold: float = 0.05
-    force_full_page_ocr: bool = False
 
     model_config = {"extra": "forbid"}

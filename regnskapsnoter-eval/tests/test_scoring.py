@@ -66,7 +66,7 @@ def test_number_present_handles_leading_zeros():
     """Don't match '12 345' inside '912 345'."""
     # This is a known limitation: regex doesn't enforce word boundaries.
     # Document the current behavior to detect any change.
-    assert number_present(12345, "X 912 345")  # current: matches
+    assert not number_present(12345, "X 912 345")
     # A future hardening could add a leading non-digit anchor.
 
 
@@ -218,3 +218,8 @@ def test_real_fixture_loads_consistent_truth_set():
         "BRREG ground-truth files may have been replaced. Update this assertion "
         "with the new count after verifying the fixture is intentional."
     )
+
+
+@pytest.mark.parametrize("value,text", [(123, "91234"), (123, "-123"), (123, "(123)"), (123, "123,45"), (-123, "-91234")])
+def test_number_recovery_rejects_wrong_value(value, text):
+    assert not number_present(value, text)

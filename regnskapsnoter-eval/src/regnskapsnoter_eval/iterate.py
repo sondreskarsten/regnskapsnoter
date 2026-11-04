@@ -5,12 +5,14 @@ from dataclasses import asdict
 import hashlib
 from importlib.metadata import version
 import json
+from time import perf_counter
 from pathlib import Path
 
 from PIL import Image
 from docling_core.types.doc import BoundingBox, CoordOrigin
 from docling_cascade_ocr.voters import TesseractVoter, TesseractTsvVoter
-from regnskapsnoter_eval import load_truth_from_local, score_consensus, truth_numbers
+from regnskapsnoter_eval import load_truth_from_local, truth_numbers
+from regnskapsnoter_eval.scoring import score_page_consensus, score_engine_text
 
 
 def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -> dict:
@@ -26,6 +28,7 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
         "tesseract_tsv": TesseractTsvVoter(lang=["no", "nb"]),
     }
     observations = {name: [] for name in voters}
+    recovered = {name: set() for name in voters}
     manifest = {
         "orgnr": orgnr,
         "metric": "document_integer_recovery",
@@ -35,14 +38,31 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
         "limitations": ["Two configurations of Tesseract are correlated.",
                        "Number recovery does not establish concept, period or cell accuracy."],
     }
-    with (output / "observations.jsonl").open("w") as stream:
+    with (output / "observations.jsonl").open("w") as stream, (output / "progress.jsonl").open("w") as progress:
         for path in pages:
             manifest["pages"].append({"name": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
             with Image.open(path) as image:
                 rect = BoundingBox(l=0, t=0, r=image.width, b=image.height, coord_origin=CoordOrigin.TOPLEFT)
                 for name, voter in voters.items():
-                    cells = voter.run(image, [rect])
-                    observations[name].extend(cells)
+                    started = perf_counter()
+                    cells = list(voter.run(image, [rect]))
+                    observations[name].append(cells)
+                    score = score_engine_text(engine=name, orgnr=orgnr,
+                                              text="\n".join(c.text for c in cells),
+                                              truth=truth[orgnr])
+                    newly_recovered = score.recovered - recovered[name]
+                    recovered[name].update(score.recovered)
+                    progress.write(json.dumps({
+                        "page": path.name, "engine": name,
+                        "seconds": perf_counter() - started,
+                        "n_cells": len(cells),
+                        "empty_output": not any(c.text.strip() for c in cells),
+                        "page_recovered": sorted(score.recovered),
+                        "newly_recovered": sorted(newly_recovered),
+                        "cumulative_recovered": sorted(recovered[name]),
+                        "remaining_document_reference_values": sorted(truth[orgnr] - recovered[name]),
+                    }) + "\n")
+                    progress.flush()
                     for cell in cells:
                         bbox = cell.rect.to_bounding_box()
                         stream.write(json.dumps({
@@ -50,7 +70,7 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
                             "confidence": cell.confidence,
                             "bbox": [bbox.l, bbox.t, bbox.r, bbox.b],
                         }, ensure_ascii=False) + "\n")
-    reports = score_consensus(orgnr=orgnr, per_voter_cells=observations,
+    reports = score_page_consensus(orgnr=orgnr, per_voter_pages=observations,
                               truth=truth[orgnr], min_voters_for_reliable=len(voters))
     result = {
         "n_reference_values": len(reports),

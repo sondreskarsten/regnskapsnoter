@@ -41,6 +41,7 @@ class EnrichmentResult:
     n_labels_seen: int = 0
     n_labels_resolved: int = 0
     n_facts_emitted: int = 0
+    unresolved_values: list = field(default_factory=list)
 
 
 def _looks_numeric(s: str) -> bool:
@@ -54,9 +55,10 @@ def _flatten_table_to_rows(table_data) -> List[List[str]]:
     Falls back gracefully if the API surface differs across docling-core
     versions; consumers should treat the rows as a hint, not a contract.
     """
-    if hasattr(table_data, "grid"):
+    grid_owner = table_data.data if hasattr(table_data, "data") and hasattr(table_data.data, "grid") else table_data
+    if hasattr(grid_owner, "grid"):
         try:
-            return [[(cell.text if cell else "") for cell in row] for row in table_data.grid]
+            return [[(cell.text if cell else "") for cell in row] for row in grid_owner.grid]
         except Exception:
             pass
     if hasattr(table_data, "data") and hasattr(table_data.data, "table_cells"):
@@ -68,10 +70,31 @@ def _flatten_table_to_rows(table_data) -> List[List[str]]:
         out = []
         for r in sorted(rows):
             row_cells = sorted(rows[r], key=lambda c: c.start_col_offset_idx)
-            out.append([c.text for c in row_cells])
+            width = max(c.start_col_offset_idx for c in cells) + 1
+            values = [""] * width
+            for c in row_cells:
+                values[c.start_col_offset_idx] = c.text
+            out.append(values)
         return out
     return []
 
+
+
+def _value_columns(rows, period_end):
+    width = max((len(row) for row in rows), default=0)
+    first = rows[0] if rows else []
+    header = (
+        len(first) > 1
+        and all(not str(value).strip() or re.fullmatch(r"(?:19|20)\d{2}|[Nn]ote(?:r)?", str(value).strip())
+                for value in first[1:])
+        and any(re.fullmatch(r"(?:19|20)\d{2}", str(value).strip()) for value in first[1:])
+        and not resolve_label(str(first[0]).strip(), use_fuzzy=False, use_embedding=False).resolved
+    )
+    if header:
+        year = str(period_end or "")[:4]
+        matches = [i for i, value in enumerate(first) if i > 0 and str(value).strip() == year]
+        return (set(matches) if len(matches) == 1 else set()), True
+    return ({1} if width == 2 else set()), False
 
 def _bbox_of_item(item) -> Tuple[float, float, float, float]:
     """Pull a (l, t, r, b) bbox from a Docling item if it has provenance."""
@@ -231,8 +254,10 @@ def enrich(
         bbox = _bbox_of_item(tbl)
         page_no = _page_of_item(tbl)
 
-        # Heuristic: column 0 is the label, columns 1..N are values per period.
-        for row in rows:
+        value_columns, has_header = _value_columns(rows, period_end)
+        for row_index, row in enumerate(rows):
+            if has_header and row_index == 0:
+                continue
             if len(row) < 2:
                 continue
             label = (row[0] or "").strip()
@@ -245,9 +270,16 @@ def enrich(
             result.n_labels_resolved += 1
 
             # Emit one annotation per non-empty numeric value in the row
-            for v in row[1:]:
+            for column_index, v in enumerate(row[1:], start=1):
                 v = (v or "").strip()
                 if not _looks_numeric(v):
+                    continue
+                if column_index not in value_columns:
+                    result.unresolved_values.append({
+                        "page": page_no, "row": row_index, "column": column_index,
+                        "label": label, "value_text": v,
+                        "reason": "column_not_uniquely_bound_to_requested_period",
+                    })
                     continue
                 ann = build_fact_annotation(
                     pdf_uri=pdf_uri,

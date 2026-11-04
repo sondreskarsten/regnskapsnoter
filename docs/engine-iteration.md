@@ -45,3 +45,9 @@ This iteration preserves the established recovery metric while adding traceable 
 Table enrichment previously stamped every numeric column with the caller's period_end. Multi-column rows now require a unique matching year in a simple first-row year header. Comparative values, numeric note references and ambiguous columns are retained in EnrichmentResult.unresolved_values with page, row, column, label, raw value and reason; they are not emitted as current-period facts. Duplicate matching-year columns also require review, because they may represent company/group dimensions.
 
 Two-column label/value tables retain the existing caller-supplied period assumption. Complex or multi-row headers are not inferred. This is a conservative binding rule, not full table understanding. Nested Docling table-data grids are now read directly; sparse fallback cells retain their column positions rather than shifting values left.
+
+## Note candidate retention
+
+The line-oriented Tesseract output now produces note-candidates.jsonl after each page. Candidates preserve the raw heading, title and number candidates, prose/table text, original cell indices, confidence and bounding boxes. A heading token I becomes a number candidate of 1 with an explicit ambiguous_I_or_1 review flag; original OCR is never overwritten. This rule follows visual inspection of Waag Produksjoner 2023 page 11.
+
+Waag page 12 contains a prose-only bank-deposit note (NOK 11 103). It is retained without requiring a table. Candidates are page-local and unreviewed: page-end boundaries are explicitly unverified, continuation pages without headings are not stitched, and footer or unrelated content can remain in the candidate text. Do not publish these as complete notes or treat candidate count as accuracy. Numeric recovery scores remain separate from note detection.

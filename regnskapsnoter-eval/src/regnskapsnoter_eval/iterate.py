@@ -13,6 +13,7 @@ from docling_core.types.doc import BoundingBox, CoordOrigin
 from docling_cascade_ocr.voters import TesseractVoter, TesseractTsvVoter
 from regnskapsnoter_eval import load_truth_from_local, truth_numbers
 from regnskapsnoter_eval.scoring import score_page_consensus, score_engine_text
+from regnskapsnoter_eval.spatial import spatial_evidence
 
 
 def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -> dict:
@@ -29,16 +30,18 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
     }
     observations = {name: [] for name in voters}
     recovered = {name: set() for name in voters}
+    spatial_recovered = {name: set() for name in voters}
     manifest = {
         "orgnr": orgnr,
         "metric": "document_integer_recovery",
+        "spatial_diagnostic": {"min_vertical_overlap": 0.5, "max_gap_height_ratio": 1.5},
         "reference_sha256": hashlib.sha256((truth_dir / f"{orgnr}.json").read_bytes()).hexdigest(),
         "packages": {name: version(name) for name in ["regnskapsnoter-eval", "docling-cascade-ocr", "docling-core"]},
         "pages": [],
         "limitations": ["Two configurations of Tesseract are correlated.",
                        "Number recovery does not establish concept, period or cell accuracy."],
     }
-    with (output / "observations.jsonl").open("w") as stream, (output / "progress.jsonl").open("w") as progress:
+    with (output / "observations.jsonl").open("w") as stream, (output / "progress.jsonl").open("w") as progress, (output / "spatial-evidence.jsonl").open("w") as spatial_stream:
         for path in pages:
             manifest["pages"].append({"name": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
             with Image.open(path) as image:
@@ -50,6 +53,14 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
                     score = score_engine_text(engine=name, orgnr=orgnr,
                                               text="\n".join(c.text for c in cells),
                                               truth=truth[orgnr])
+                    evidence = spatial_evidence(cells, truth[orgnr])
+                    spatial_hits = {n for item in evidence for n in item["values"]}
+                    spatial_recovered[name].update(spatial_hits)
+                    for item in evidence:
+                        spatial_stream.write(json.dumps({
+                            "page": path.name, "engine": name, **item,
+                        }, ensure_ascii=False) + "\n")
+                    spatial_stream.flush()
                     newly_recovered = score.recovered - recovered[name]
                     recovered[name].update(score.recovered)
                     progress.write(json.dumps({
@@ -58,6 +69,8 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
                         "n_cells": len(cells),
                         "empty_output": not any(c.text.strip() for c in cells),
                         "page_recovered": sorted(score.recovered),
+                        "spatial_recovered": sorted(spatial_hits),
+                        "requires_spatial_review": sorted(score.recovered - spatial_hits),
                         "newly_recovered": sorted(newly_recovered),
                         "cumulative_recovered": sorted(recovered[name]),
                         "remaining_document_reference_values": sorted(truth[orgnr] - recovered[name]),
@@ -77,6 +90,8 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
         "recovered_by_any": sum(r.n_hit > 0 for r in reports),
         "recovered_by_all": sum(r.unanimous for r in reports),
         "values": [asdict(r) for r in reports],
+        "spatial_recovered_by_engine": {name: sorted(values) for name, values in spatial_recovered.items()},
+        "requires_spatial_review_by_engine": {name: sorted(recovered[name] - spatial_recovered[name]) for name in voters},
     }
     (output / "manifest.json").write_text(json.dumps(manifest, indent=2))
     (output / "evaluation.json").write_text(json.dumps(result, indent=2))

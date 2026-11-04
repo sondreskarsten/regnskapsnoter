@@ -30,48 +30,24 @@ _PAREN_NEG_RE = re.compile(r"\(\s*([\d\s.,]+)\s*\)")
 
 
 def number_present(n: int, text: str) -> bool:
-    """True iff the integer ``n`` appears in ``text``.
-
-    Matches:
-    - grouped:  ``1 234 567`` with any whitespace between groups
-    - digit-by-digit: ``1234567`` with optional whitespace anywhere
-    - sign: ASCII minus, Unicode minus (U+2212), or surrounding parentheses
-    """
+    """Match a complete integer, preserving sign and rejecting decimal substrings."""
     if n is None:
         return False
-
-    # Normalise Unicode minus / hyphen variants to ASCII before matching
     for ch in "\u2010\u2011\u2012\u2013\u2014\u2212":
         text = text.replace(ch, "-")
-
-    n_int = int(round(n))
-    sign = "-" if n_int < 0 else ""
-    n_abs = abs(n_int)
-
-    if n_abs == 0:
-        # A bare 0 is too noisy to match without context; require a separator
-        return bool(re.search(r"(?:^|\s|\n)0(?:\s|$|\n|[.,])", text))
-
-    s = str(n_abs)
-    s_rev = s[::-1]
-    groups = [s_rev[i:i + 3][::-1] for i in range(0, len(s_rev), 3)][::-1]
-
-    pat_grouped = sign + r"\s*".join(re.escape(g) for g in groups)
-    pat_digits = sign + r"\s*".join(re.escape(d) for d in s)
-
-    if re.search(pat_grouped, text):
-        return True
-    if re.search(pat_digits, text):
-        return True
-
-    # Parenthesised negative
-    if sign == "-":
-        for m in _PAREN_NEG_RE.finditer(text):
-            inner = m.group(1)
-            if re.search(r"\s*".join(re.escape(g) for g in groups), inner):
-                return True
-            if re.search(r"\s*".join(re.escape(d) for d in s), inner):
-                return True
+    n_int = int(n)
+    if n_int != n:
+        return False
+    digits = r"\s*".join(re.escape(d) for d in str(abs(n_int)))
+    pattern = r"(?<![\d.,])" + digits + r"(?![\d.,])"
+    for match in re.finditer(pattern, text):
+        prefix = text[:match.start()]
+        suffix = text[match.end():]
+        minus = bool(re.search(r"-\s*$", prefix))
+        parenthesised = bool(re.search(r"\(\s*$", prefix) and re.match(r"\s*\)", suffix))
+        negative = minus or parenthesised
+        if negative == (n_int < 0):
+            return True
     return False
 
 

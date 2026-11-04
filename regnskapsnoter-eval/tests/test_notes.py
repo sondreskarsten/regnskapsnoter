@@ -43,3 +43,17 @@ def test_empty_and_heading_only_pages_are_explicit():
     assert result[0]["text"] == ""
     assert result[0]["status"] == "unreviewed_candidate"
     assert result[0]["boundary"] == "page_end_unverified"
+
+
+def test_split_heading_from_saved_brreg_template():
+    result = extract(["Note", "1", "Regnskapsprinsipper", "Årsregnskapet er satt opp i samsvar med regnskapsloven."])
+    assert len(result) == 1
+    assert result[0]["heading_raw"] == "Note\n1\nRegnskapsprinsipper"
+    assert result[0]["number_candidate"] == 1
+    assert result[0]["review_flags"] == ["split_heading_candidate"]
+    assert result[0]["text"].startswith("Årsregnskapet")
+    assert [c["index"] for c in result[0]["source_cells"]] == [0, 1, 2, 3]
+
+
+def test_split_note_column_followed_by_year_is_not_a_heading():
+    assert extract(["Note", "2023", "Eiendeler"]) == []

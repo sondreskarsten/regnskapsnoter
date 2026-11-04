@@ -103,6 +103,25 @@ jobs:
             eval-results.xml
             iteration/
 
+  live-kopi:
+    if: github.event_name == 'pull_request' && github.head_ref == 'codex/engine-iteration'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update -qq && sudo apt-get install -y tesseract-ocr tesseract-ocr-nor tesseract-ocr-eng
+      - run: pip install pytest pytesseract Pillow pymupdf requests ./regnskap-no ./docling-cascade-ocr ./regnskapsnoter-eval
+      - run: python -m regnskapsnoter_eval.live --orgnr 811602892 964163006 813322072 --output live-kopi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-kopi-iteration
+          path: live-kopi/
+          retention-days: 30
+
   taxonomy-rebuild-check:
     # Sanity check: the bundled regnskap-no Parquet artifacts can be rebuilt
     # from the current taxonomy source. This catches the "wheel goes stale"

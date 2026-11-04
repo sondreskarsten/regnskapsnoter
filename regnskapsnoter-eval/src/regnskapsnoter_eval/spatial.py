@@ -4,6 +4,7 @@ from .scoring import number_present
 
 
 def spatial_evidence(cells, truth):
+    signs = {"-", "\u2212", "(", ")"}
     rows = []
     for index, cell in enumerate(cells):
         box = cell.rect.to_bounding_box()
@@ -18,7 +19,9 @@ def spatial_evidence(cells, truth):
             line for line in lines
             if height > 0 and line["bottom"] > line["top"]
             and min(row[5], line["bottom"]) - max(row[3], line["top"])
-            >= 0.5 * max(height, line["bottom"] - line["top"])
+            >= 0.5 * (min(height, line["bottom"] - line["top"])
+                      if row[1].strip() in signs or all(c[1].strip() in signs for c in line["cells"])
+                      else max(height, line["bottom"] - line["top"]))
         ]
         if candidates:
             line = min(candidates, key=lambda line: abs(row[3] - line["top"]))
@@ -32,7 +35,9 @@ def spatial_evidence(cells, truth):
             if current:
                 previous = current[-1]
                 gap = row[2] - previous[4]
-                height = min(row[5] - row[3], previous[5] - previous[3])
+                heights = (row[5] - row[3], previous[5] - previous[3])
+                height = (max(heights) if row[1].strip() in signs or previous[1].strip() in signs
+                          else min(heights))
                 if gap < 0 or height <= 0 or gap > 1.5 * height:
                     segments.append(current)
                     current = []

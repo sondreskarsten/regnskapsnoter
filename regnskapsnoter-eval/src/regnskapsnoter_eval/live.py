@@ -42,6 +42,9 @@ def select_reference(raw: bytes, years: list[int], year: int | None = None) -> d
             actual_year = int(end[:4])
             if actual_year in years and (year is None or year == actual_year):
                 candidates.append(record)
+    if candidates and year is None:
+        latest = max(r["regnskapsperiode"]["tilDato"][:4] for r in candidates)
+        candidates = [r for r in candidates if r["regnskapsperiode"]["tilDato"].startswith(latest)]
     if len(candidates) != 1:
         raise ValueError(f"Expected one matching reference; found {len(candidates)}")
     return candidates[0]

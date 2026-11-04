@@ -232,3 +232,30 @@ def score_fixture(
 
     fs.per_voter_recall = {v: (voter_hits[v], voter_totals[v]) for v in voter_hits}
     return fs
+
+
+def score_page_consensus(
+    *, orgnr: str, per_voter_pages: Dict[str, List[List[TextCell]]],
+    truth: Set[int], min_voters_for_reliable: int = 7,
+) -> List[ReliabilityReport]:
+    recovered = {
+        voter: set().union(*(
+            score_engine_text(engine=voter, orgnr=orgnr,
+                              text=_cells_to_text(cells), truth=truth).recovered
+            for cells in pages
+        ))
+        for voter, pages in per_voter_pages.items()
+    }
+    voters = sorted(recovered)
+    return [
+        ReliabilityReport(
+            orgnr=orgnr, truth_value=n,
+            voters_hit=[v for v in voters if n in recovered[v]],
+            voters_attempted=voters,
+            n_hit=sum(n in recovered[v] for v in voters),
+            n_attempted=len(voters),
+            unanimous=bool(voters) and all(n in recovered[v] for v in voters),
+            reliable=sum(n in recovered[v] for v in voters) >= min_voters_for_reliable,
+        )
+        for n in sorted(truth)
+    ]

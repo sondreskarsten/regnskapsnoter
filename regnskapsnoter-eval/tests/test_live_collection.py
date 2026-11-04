@@ -19,3 +19,9 @@ def test_ambiguous_submission_rejected():
 
 def test_reference_metrics_exclude_booleans():
     assert numeric_metrics(record(2024)) == {"eiendeler.sumEiendeler": 1234}
+
+
+def test_latest_common_year_selected_from_multiple_records():
+    raw = json.dumps([record(2023), record(2025), record(2024)]).encode()
+    assert select_reference(raw, [2023, 2024, 2025]) == record(2025)
+    assert select_reference(raw, [2023, 2024]) == record(2024)

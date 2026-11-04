@@ -14,6 +14,7 @@ from docling_cascade_ocr.voters import TesseractVoter, TesseractTsvVoter
 from regnskapsnoter_eval import load_truth_from_local, truth_numbers
 from regnskapsnoter_eval.scoring import score_page_consensus, score_engine_text
 from regnskapsnoter_eval.spatial import spatial_evidence
+from regnskapsnoter_eval.notes import note_candidates
 
 
 def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -> dict:
@@ -31,9 +32,11 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
     observations = {name: [] for name in voters}
     recovered = {name: set() for name in voters}
     spatial_recovered = {name: set() for name in voters}
+    n_note_candidates = 0
     manifest = {
         "orgnr": orgnr,
         "metric": "document_integer_recovery",
+        "note_candidates": {"engine": "tesseract", "scope": "page_local", "status": "unreviewed"},
         "spatial_diagnostic": {"min_vertical_overlap": 0.5, "max_gap_height_ratio": 1.5},
         "reference_sha256": hashlib.sha256((truth_dir / f"{orgnr}.json").read_bytes()).hexdigest(),
         "packages": {name: version(name) for name in ["regnskapsnoter-eval", "docling-cascade-ocr", "docling-core"]},
@@ -41,7 +44,7 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
         "limitations": ["Two configurations of Tesseract are correlated.",
                        "Number recovery does not establish concept, period or cell accuracy."],
     }
-    with (output / "observations.jsonl").open("w") as stream, (output / "progress.jsonl").open("w") as progress, (output / "spatial-evidence.jsonl").open("w") as spatial_stream:
+    with (output / "observations.jsonl").open("w") as stream, (output / "progress.jsonl").open("w") as progress, (output / "spatial-evidence.jsonl").open("w") as spatial_stream, (output / "note-candidates.jsonl").open("w") as notes_stream:
         for path in pages:
             manifest["pages"].append({"name": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
             with Image.open(path) as image:
@@ -50,6 +53,12 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
                     started = perf_counter()
                     cells = list(voter.run(image, [rect]))
                     observations[name].append(cells)
+                    if name == "tesseract":
+                        notes = note_candidates(cells, page=path.name, engine=name)
+                        n_note_candidates += len(notes)
+                        for note in notes:
+                            notes_stream.write(json.dumps(note, ensure_ascii=False) + "\n")
+                        notes_stream.flush()
                     score = score_engine_text(engine=name, orgnr=orgnr,
                                               text="\n".join(c.text for c in cells),
                                               truth=truth[orgnr])
@@ -87,6 +96,7 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
                               truth=truth[orgnr], min_voters_for_reliable=len(voters))
     result = {
         "n_reference_values": len(reports),
+        "n_note_candidates": n_note_candidates,
         "recovered_by_any": sum(r.n_hit > 0 for r in reports),
         "recovered_by_all": sum(r.unanimous for r in reports),
         "values": [asdict(r) for r in reports],

@@ -90,7 +90,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: sudo apt-get update -qq && sudo apt-get install -y tesseract-ocr tesseract-ocr-nor tesseract-ocr-eng fonts-dejavu
-      - run: pip install pytest pytesseract Pillow ./regnskap-no ./docling-cascade-ocr ./regnskapsnoter-eval
+      - run: pip install pytest pytesseract Pillow pymupdf requests ./regnskap-no ./docling-cascade-ocr ./regnskapsnoter-eval
       - run: pytest -q regnskapsnoter-eval/tests --junitxml=eval-results.xml
       - name: Run reproducible engine iteration
         if: always()

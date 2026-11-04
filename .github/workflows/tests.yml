@@ -78,6 +78,22 @@ jobs:
       - name: Test regnskapsnoter-pipeline
         run: pytest -q regnskapsnoter-pipeline/tests
 
+  eval:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update -qq && sudo apt-get install -y tesseract-ocr tesseract-ocr-nor tesseract-ocr-eng fonts-dejavu
+      - run: pip install pytest pytesseract Pillow ./regnskap-no ./docling-cascade-ocr ./regnskapsnoter-eval
+      - run: pytest -q regnskapsnoter-eval/tests --junitxml=eval-results.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: engine-evaluation
+          path: eval-results.xml
+
   taxonomy-rebuild-check:
     # Sanity check: the bundled regnskap-no Parquet artifacts can be rebuilt
     # from the current taxonomy source. This catches the "wheel goes stale"

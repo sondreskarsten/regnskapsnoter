@@ -10,6 +10,7 @@ from pathlib import Path
 
 from PIL import Image
 from docling_core.types.doc import BoundingBox, CoordOrigin
+from docling_cascade_ocr.ledger import AuditLedger
 from docling_cascade_ocr.voters import TesseractVoter, TesseractTsvVoter
 from regnskapsnoter_eval import load_truth_from_local, truth_numbers
 from regnskapsnoter_eval.scoring import score_page_consensus, score_engine_text
@@ -29,6 +30,7 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
         "tesseract": TesseractVoter(lang=["no", "nb"]),
         "tesseract_tsv": TesseractTsvVoter(lang=["no", "nb"]),
     }
+    ledger = AuditLedger(str(output / "audit.jsonl"))
     observations = {name: [] for name in voters}
     recovered = {name: set() for name in voters}
     spatial_recovered = {name: set() for name in voters}
@@ -36,6 +38,7 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
     manifest = {
         "orgnr": orgnr,
         "metric": "document_integer_recovery",
+        "audit": {"path": "audit.jsonl", "schema": "v2", "granularity": "page_engine", "consensus_computed": False},
         "note_candidates": {"engine": "tesseract", "scope": "page_local", "status": "unreviewed"},
         "spatial_diagnostic": {"min_vertical_overlap": 0.5, "max_gap_height_ratio": 1.5},
         "reference_sha256": hashlib.sha256((truth_dir / f"{orgnr}.json").read_bytes()).hexdigest(),
@@ -46,12 +49,30 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
     }
     with (output / "observations.jsonl").open("w") as stream, (output / "progress.jsonl").open("w") as progress, (output / "spatial-evidence.jsonl").open("w") as spatial_stream, (output / "note-candidates.jsonl").open("w") as notes_stream:
         for path in pages:
+            page_no = int(path.stem.rsplit("_page", 1)[1])
             manifest["pages"].append({"name": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
             with Image.open(path) as image:
                 rect = BoundingBox(l=0, t=0, r=image.width, b=image.height, coord_origin=CoordOrigin.TOPLEFT)
                 for name, voter in voters.items():
                     started = perf_counter()
                     cells = list(voter.run(image, [rect]))
+                    ledger.write_page(
+                        document_id=orgnr, page_no=page_no,
+                        per_voter_cells={name: cells}, consensus_cells=[],
+                        diagnostics={"iteration": {
+                            "stage": "ocr_completed", "engine": name,
+                            "page": path.name, "consensus_computed": False,
+                        }},
+                        page_size=(image.width, image.height),
+                    )
+                    for cell in cells:
+                        bbox = cell.rect.to_bounding_box()
+                        stream.write(json.dumps({
+                            "page": path.name, "engine": name, "text": cell.text,
+                            "confidence": cell.confidence,
+                            "bbox": [bbox.l, bbox.t, bbox.r, bbox.b],
+                        }, ensure_ascii=False) + "\n")
+                    stream.flush()
                     observations[name].append(cells)
                     if name == "tesseract":
                         notes = note_candidates(cells, page=path.name, engine=name)
@@ -85,13 +106,7 @@ def run_iteration(raster_dir: Path, truth_dir: Path, orgnr: str, output: Path) -
                         "remaining_document_reference_values": sorted(truth[orgnr] - recovered[name]),
                     }) + "\n")
                     progress.flush()
-                    for cell in cells:
-                        bbox = cell.rect.to_bounding_box()
-                        stream.write(json.dumps({
-                            "page": path.name, "engine": name, "text": cell.text,
-                            "confidence": cell.confidence,
-                            "bbox": [bbox.l, bbox.t, bbox.r, bbox.b],
-                        }, ensure_ascii=False) + "\n")
+
     reports = score_page_consensus(orgnr=orgnr, per_voter_pages=observations,
                               truth=truth[orgnr], min_voters_for_reliable=len(voters))
     result = {

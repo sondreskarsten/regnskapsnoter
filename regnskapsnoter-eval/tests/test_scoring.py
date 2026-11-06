@@ -223,3 +223,21 @@ def test_real_fixture_loads_consistent_truth_set():
 @pytest.mark.parametrize("value,text", [(123, "91234"), (123, "-123"), (123, "(123)"), (123, "123,45"), (-123, "-91234")])
 def test_number_recovery_rejects_wrong_value(value, text):
     assert not number_present(value, text)
+
+
+@pytest.mark.parametrize("text", [
+    "Innestående midler på skattetrekkskonto (bundne midler) er kr 11 103.",
+    "Beløpet er 11 103. Midlene er bundet.",
+    "Beløpet er 11 103, og midlene er bundet.",
+])
+def test_number_recovery_accepts_prose_punctuation(text):
+    assert number_present(11103, text)
+
+
+@pytest.mark.parametrize("value,text", [
+    (123, "123.45"), (123, "123,45"), (123, "123, 45"),
+    (123, "123. 45"), (45, "123.45"), (45, "123,45"),
+    (123, "-123."), (-123, "123."),
+])
+def test_prose_punctuation_keeps_decimal_and_sign_guards(value, text):
+    assert not number_present(value, text)

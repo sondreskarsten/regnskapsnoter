@@ -39,7 +39,7 @@ def number_present(n: int, text: str) -> bool:
     if n_int != n:
         return False
     digits = r"\s*".join(re.escape(d) for d in str(abs(n_int)))
-    pattern = r"(?<![\d.,])" + digits + r"(?![\d.,])"
+    pattern = r"(?<![\d.,])" + digits + r"(?!\d|[.,]\s*\d)"
     for match in re.finditer(pattern, text):
         prefix = text[:match.start()]
         suffix = text[match.end():]
